@@ -13,22 +13,30 @@ body{
   padding:24px;color:#2f2f2f
 }
 .app{max-width:1100px;margin:auto;display:grid;gap:24px}
+
+/* PRICE BAR */
 .prices{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
-  padding:18px;border-radius:20px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:18px;padding:18px;border-radius:20px;
   background:linear-gradient(135deg,#c7d2fe,#e0e7ff)
 }
 .price-box label{font-weight:700}
 .price-box input{
-  width:100%;padding:12px;border-radius:14px;
-  border:none;font-size:16px
+  width:100%;padding:12px;border:none;
+  border-radius:14px;font-size:16px
 }
+
+/* MAIN */
 .main{display:grid;grid-template-columns:2fr 1fr;gap:24px}
+
+/* BILLING */
 .billing{
   background:linear-gradient(135deg,#fff7ed,#ffedd5);
   padding:20px;border-radius:24px
 }
 .billing h3{text-align:center;font-size:26px}
+
+/* ICONS */
 .icon-group{display:flex;gap:14px;margin:10px 0 18px}
 .icon-btn{
   flex:1;padding:16px 0;border-radius:20px;
@@ -38,11 +46,14 @@ body{
 .icon-btn.active{
   background:linear-gradient(135deg,#fde68a,#fbbf24)
 }
+
 .field label{font-weight:700}
 .field input{
   width:100%;padding:12px;font-size:16px;
   border-radius:14px;border:none
 }
+
+/* TOTALS */
 .totals{
   background:linear-gradient(135deg,#ecfeff,#cffafe);
   padding:20px;border-radius:24px
@@ -50,16 +61,19 @@ body{
 .total-box{
   background:rgba(255,255,255,.9);
   border-radius:18px;padding:16px;
-  text-align:center;font-weight:700;margin-bottom:12px
+  text-align:center;font-weight:700;
+  margin-bottom:12px
 }
 .total-box span{font-size:26px}
 #balance{font-size:30px;font-weight:900}
+
 button.next{
   width:100%;margin-top:14px;
   padding:14px;border-radius:18px;
-  border:none;background:#6366f1;
-  color:white;font-size:16px;font-weight:700
+  border:none;background:#6366f1;color:#fff;
+  font-size:16px;font-weight:700
 }
+
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
   .prices{grid-template-columns:1fr}
@@ -106,23 +120,23 @@ button.next{
 </div>
 
 <div class="field" id="kgBlock" style="display:none">
-<label>Weight (KG)</label>
-<input id="kgInput" type="number" step="0.01">
+  <label>Weight (KG)</label>
+  <input id="kgInput" type="number" step="0.01">
 </div>
 
 <div class="field" id="amountBlock" style="display:none">
-<label>Amount (₹)</label>
-<input id="amountInput" type="number">
+  <label>Amount (₹)</label>
+  <input id="amountInput" type="number">
 </div>
 
 <div class="field">
-<label>🥚 Egg Units</label>
-<input id="eggQty" type="number">
+  <label>🥚 Egg Units</label>
+  <input id="eggQty" type="number">
 </div>
 
 <div class="field">
-<label>💵 Amount Received</label>
-<input id="amountReceived" type="number">
+  <label>💵 Amount Received</label>
+  <input id="amountReceived" type="number">
 </div>
 
 <button class="next" id="nextCustomerBtn">🧾 Next Customer</button>
@@ -141,51 +155,52 @@ button.next{
 </div>
 
 <script>
-/* ---------- SAFE LOCAL DATE ---------- */
+/* ---------------- LOCAL DATE SAFE ---------------- */
 function localDateKey(){
   const d=new Date();
   return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 
-/* ---------- DAILY SALES RESET ---------- */
+/* ---------------- DAILY SALES RESET ---------------- */
 if(localStorage.getItem("salesDate")!==localDateKey()){
   localStorage.setItem("salesDate",localDateKey());
   localStorage.setItem("dailySales","0");
 }
 
-/* ---------- LOAD DAILY SALES ---------- */
+/* ---------------- LOAD DAILY SALES ---------------- */
 let dailySales=Number(localStorage.getItem("dailySales"))||0;
 dailyTotal.innerText=dailySales.toFixed(2);
 
-/* ---------- LOAD PRICES SAFELY ---------- */
+/* ---------------- PRICE STORAGE (FIXED) ---------------- */
 function loadPrices(){
   const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
-  if(p.broiler) broilerPrice.value=p.broiler;
-  if(p.country) countryPrice.value=p.country;
-  if(p.egg) eggPrice.value=p.egg;
+  if(p.hasOwnProperty("broiler")) broilerPrice.value=p.broiler;
+  if(p.hasOwnProperty("country")) countryPrice.value=p.country;
+  if(p.hasOwnProperty("egg")) eggPrice.value=p.egg;
 }
 loadPrices();
 
-/* ---------- SAVE PRICES (NO EMPTY SAVE) ---------- */
 function savePrices(){
   const prices={
-    broiler:broilerPrice.value||undefined,
-    country:countryPrice.value||undefined,
-    egg:eggPrice.value||undefined
+    broiler:broilerPrice.value,
+    country:countryPrice.value,
+    egg:eggPrice.value
   };
   localStorage.setItem("shopPrices",JSON.stringify(prices));
 }
-broilerPrice.oninput=savePrices;
-countryPrice.oninput=savePrices;
-eggPrice.oninput=savePrices;
 
-/* ---------- STATE ---------- */
+broilerPrice.addEventListener("input",savePrices);
+countryPrice.addEventListener("input",savePrices);
+eggPrice.addEventListener("input",savePrices);
+
+/* ---------------- STATE ---------------- */
 let selectedChicken=null;
 let saleMode=null;
 
-/* CHICKEN SELECT */
+/* CHICKEN ICONS */
 broilerBtn.onclick=()=>selectChicken("broiler");
 countryBtn.onclick=()=>selectChicken("country");
+
 function selectChicken(t){
   selectedChicken=t;
   broilerBtn.classList.toggle("active",t==="broiler");
@@ -193,9 +208,10 @@ function selectChicken(t){
   calculate();
 }
 
-/* SALE MODE */
+/* SALE MODE ICONS */
 kgMode.onclick=()=>setMode("kg");
 rsMode.onclick=()=>setMode("rs");
+
 function setMode(m){
   saleMode=m;
   kgMode.classList.toggle("active",m==="kg");
@@ -206,7 +222,7 @@ function setMode(m){
   calculate();
 }
 
-/* CALC */
+/* ---------------- CALCULATE ---------------- */
 document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
 
 function calculate(){
@@ -238,7 +254,7 @@ function calculate(){
   balance.style.color=bal>=0?"green":"red";
 }
 
-/* NEXT CUSTOMER */
+/* ---------------- NEXT CUSTOMER ---------------- */
 nextCustomerBtn.onclick=()=>{
   const bill=Number(grandTotal.innerText)||0;
   if(bill>0){
