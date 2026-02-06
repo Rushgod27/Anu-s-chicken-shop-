@@ -10,14 +10,14 @@
 body{
   font-family:"Segoe UI",system-ui;
   background:linear-gradient(135deg,#fdf6f0,#eef2ff);
-  padding:24px;color:#2f2f2f
+  padding:20px;color:#2f2f2f
 }
-.app{max-width:1100px;margin:auto;display:grid;gap:24px}
+.app{max-width:1200px;margin:auto;display:grid;gap:20px}
 
 /* PRICE BAR */
 .prices{
   display:grid;grid-template-columns:repeat(3,1fr);
-  gap:18px;padding:18px;border-radius:20px;
+  gap:16px;padding:16px;border-radius:18px;
   background:linear-gradient(135deg,#c7d2fe,#e0e7ff)
 }
 .price-box label{font-weight:700}
@@ -27,52 +27,72 @@ body{
 }
 
 /* MAIN */
-.main{display:grid;grid-template-columns:2fr 1fr;gap:24px}
+.main{display:grid;grid-template-columns:2fr 1.2fr;gap:20px}
 
 /* BILLING */
 .billing{
   background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  padding:20px;border-radius:24px
+  padding:20px;border-radius:22px
 }
-.billing h3{text-align:center;font-size:26px}
+.billing h3{text-align:center;font-size:24px}
 
-/* ICONS */
-.icon-group{display:flex;gap:14px;margin:10px 0 18px}
+/* ICON GROUP */
+.icon-group{display:flex;gap:12px;margin:10px 0}
 .icon-btn{
-  flex:1;padding:16px 0;border-radius:20px;
-  border:none;font-size:17px;font-weight:700;
+  flex:1;padding:14px 0;border-radius:18px;
+  border:none;font-size:16px;font-weight:700;
   background:#f1f5f9;cursor:pointer
 }
-.icon-btn.active{
-  background:linear-gradient(135deg,#fde68a,#fbbf24)
-}
+.icon-btn.active{background:#fbbf24}
 
+/* INPUTS */
+.field{margin-bottom:10px}
 .field label{font-weight:700}
 .field input{
   width:100%;padding:12px;font-size:16px;
-  border-radius:14px;border:none
+  border-radius:14px;border:2px solid transparent
+}
+.field input.active{
+  border-color:#6366f1;
+  box-shadow:0 0 0 3px rgba(99,102,241,.3)
 }
 
 /* TOTALS */
 .totals{
   background:linear-gradient(135deg,#ecfeff,#cffafe);
-  padding:20px;border-radius:24px
+  padding:16px;border-radius:22px
 }
 .total-box{
-  background:rgba(255,255,255,.9);
-  border-radius:18px;padding:16px;
-  text-align:center;font-weight:700;
-  margin-bottom:12px
+  background:white;border-radius:16px;
+  padding:14px;text-align:center;
+  font-weight:700;margin-bottom:10px
 }
-.total-box span{font-size:26px}
-#balance{font-size:30px;font-weight:900}
+.total-box span{font-size:24px}
+#balance{font-size:28px;font-weight:900}
 
+/* NEXT */
 button.next{
-  width:100%;margin-top:14px;
-  padding:14px;border-radius:18px;
-  border:none;background:#6366f1;color:#fff;
-  font-size:16px;font-weight:700
+  width:100%;margin-top:10px;
+  padding:14px;border-radius:16px;
+  border:none;background:#6366f1;
+  color:white;font-size:16px;font-weight:700
 }
+
+/* NUMBER PAD */
+.keypad{
+  background:#111827;
+  padding:14px;border-radius:20px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-top:10px
+}
+.keypad button{
+  padding:18px;font-size:20px;
+  border:none;border-radius:14px;
+  background:#374151;color:white;
+  font-weight:700
+}
+.keypad button.action{background:#ef4444}
+.keypad button.clear{background:#6366f1}
 
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
@@ -88,15 +108,15 @@ button.next{
 <!-- PRICES -->
 <div class="prices">
   <div class="price-box">
-    <label>🐔 Broiler (₹ / Kg)</label>
+    <label>🐔 Broiler ₹/Kg</label>
     <input id="broilerPrice" type="number">
   </div>
   <div class="price-box">
-    <label>🐓 Country (₹ / Kg)</label>
+    <label>🐓 Country ₹/Kg</label>
     <input id="countryPrice" type="number">
   </div>
   <div class="price-box">
-    <label>🥚 Egg (₹ / Unit)</label>
+    <label>🥚 Egg ₹</label>
     <input id="eggPrice" type="number">
   </div>
 </div>
@@ -109,140 +129,156 @@ button.next{
 
 <label>🐔 Chicken Type</label>
 <div class="icon-group">
-  <button class="icon-btn" id="broilerBtn">🐔<br>Broiler</button>
-  <button class="icon-btn" id="countryBtn">🐓<br>Country</button>
+  <button class="icon-btn" onclick="selectChicken('broiler')">🐔 Broiler</button>
+  <button class="icon-btn" onclick="selectChicken('country')">🐓 Country</button>
 </div>
 
 <label>⚖️ Sale Mode</label>
 <div class="icon-group">
-  <button class="icon-btn" id="kgMode">⚖️<br>By KG</button>
-  <button class="icon-btn" id="rsMode">💰<br>By ₹</button>
+  <button class="icon-btn" onclick="setMode('kg')">⚖️ KG</button>
+  <button class="icon-btn" onclick="setMode('rs')">💰 ₹</button>
 </div>
 
 <div class="field" id="kgBlock" style="display:none">
   <label>Weight (KG)</label>
-  <input id="kgInput" type="number" step="0.01">
+  <input id="kgInput" readonly>
 </div>
 
 <div class="field" id="amountBlock" style="display:none">
   <label>Amount (₹)</label>
-  <input id="amountInput" type="number">
+  <input id="amountInput" readonly>
 </div>
 
 <div class="field">
   <label>🥚 Egg Units</label>
-  <input id="eggQty" type="number">
+  <input id="eggQty" readonly>
 </div>
 
 <div class="field">
   <label>💵 Amount Received</label>
-  <input id="amountReceived" type="number">
+  <input id="amountReceived" readonly>
 </div>
 
-<button class="next" id="nextCustomerBtn">🧾 Next Customer</button>
+<button class="next" onclick="nextCustomer()">🧾 Next Customer</button>
 </div>
 
-<!-- TOTALS -->
+<!-- TOTALS + KEYPAD -->
 <div class="totals">
   <div class="total-box">🐔 Chicken ₹<span id="chickenTotal">0.00</span></div>
   <div class="total-box">🥚 Egg ₹<span id="eggTotal">0.00</span></div>
   <div class="total-box">💰 Total ₹<span id="grandTotal">0.00</span></div>
   <div class="total-box">🔁 Balance ₹<span id="balance">0.00</span></div>
   <div class="total-box">📊 Today ₹<span id="dailyTotal">0.00</span></div>
+
+  <!-- NUMBER PAD -->
+  <div class="keypad">
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button>
+    <button onclick="press('4')">4</button>
+    <button onclick="press('5')">5</button>
+    <button onclick="press('6')">6</button>
+    <button onclick="press('1')">1</button>
+    <button onclick="press('2')">2</button>
+    <button onclick="press('3')">3</button>
+    <button onclick="press('.')">.</button>
+    <button onclick="press('0')">0</button>
+    <button class="action" onclick="backspace()">⌫</button>
+    <button class="clear" onclick="clearField()">C</button>
+  </div>
 </div>
 
 </div>
 </div>
 
 <script>
-/* ---------------- LOCAL DATE SAFE ---------------- */
-function localDateKey(){
+/* ---------- STORAGE ---------- */
+function dateKey(){
   const d=new Date();
-  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 }
-
-/* ---------------- DAILY SALES RESET ---------------- */
-if(localStorage.getItem("salesDate")!==localDateKey()){
-  localStorage.setItem("salesDate",localDateKey());
+if(localStorage.getItem("salesDate")!==dateKey()){
+  localStorage.setItem("salesDate",dateKey());
   localStorage.setItem("dailySales","0");
 }
-
-/* ---------------- LOAD DAILY SALES ---------------- */
 let dailySales=Number(localStorage.getItem("dailySales"))||0;
 dailyTotal.innerText=dailySales.toFixed(2);
 
-/* ---------------- PRICE STORAGE (FIXED) ---------------- */
 function loadPrices(){
   const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
-  if(p.hasOwnProperty("broiler")) broilerPrice.value=p.broiler;
-  if(p.hasOwnProperty("country")) countryPrice.value=p.country;
-  if(p.hasOwnProperty("egg")) eggPrice.value=p.egg;
+  if(p.broiler!==undefined) broilerPrice.value=p.broiler;
+  if(p.country!==undefined) countryPrice.value=p.country;
+  if(p.egg!==undefined) eggPrice.value=p.egg;
 }
 loadPrices();
 
 function savePrices(){
-  const prices={
+  localStorage.setItem("shopPrices",JSON.stringify({
     broiler:broilerPrice.value,
     country:countryPrice.value,
     egg:eggPrice.value
-  };
-  localStorage.setItem("shopPrices",JSON.stringify(prices));
+  }));
 }
+broilerPrice.oninput=countryPrice.oninput=eggPrice.oninput=savePrices;
 
-broilerPrice.addEventListener("input",savePrices);
-countryPrice.addEventListener("input",savePrices);
-eggPrice.addEventListener("input",savePrices);
-
-/* ---------------- STATE ---------------- */
+/* ---------- STATE ---------- */
 let selectedChicken=null;
 let saleMode=null;
+let activeInput=null;
 
-/* CHICKEN ICONS */
-broilerBtn.onclick=()=>selectChicken("broiler");
-countryBtn.onclick=()=>selectChicken("country");
+/* INPUT FOCUS */
+document.querySelectorAll("input").forEach(i=>{
+  i.onclick=()=>{
+    document.querySelectorAll(".field input").forEach(x=>x.classList.remove("active"));
+    i.classList.add("active");
+    activeInput=i;
+  };
+});
 
-function selectChicken(t){
-  selectedChicken=t;
-  broilerBtn.classList.toggle("active",t==="broiler");
-  countryBtn.classList.toggle("active",t==="country");
+function press(v){
+  if(!activeInput) return;
+  activeInput.value+=v;
+  calculate();
+}
+function backspace(){
+  if(!activeInput) return;
+  activeInput.value=activeInput.value.slice(0,-1);
+  calculate();
+}
+function clearField(){
+  if(!activeInput) return;
+  activeInput.value="";
   calculate();
 }
 
-/* SALE MODE ICONS */
-kgMode.onclick=()=>setMode("kg");
-rsMode.onclick=()=>setMode("rs");
+/* SELECTION */
+function selectChicken(t){
+  selectedChicken=t;
+  document.querySelectorAll(".icon-group button").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+  calculate();
+}
 
 function setMode(m){
   saleMode=m;
-  kgMode.classList.toggle("active",m==="kg");
-  rsMode.classList.toggle("active",m==="rs");
   kgBlock.style.display=m==="kg"?"block":"none";
   amountBlock.style.display=m==="rs"?"block":"none";
-  kgInput.value=amountInput.value="";
   calculate();
 }
 
-/* ---------------- CALCULATE ---------------- */
-document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
-
+/* CALCULATION */
 function calculate(){
   const egg=(Number(eggQty.value)||0)*(Number(eggPrice.value)||0);
+  let chicken=0;
 
-  if(!selectedChicken||!saleMode){
-    chickenTotal.innerText="0.00";
-    eggTotal.innerText=egg.toFixed(2);
-    grandTotal.innerText=egg.toFixed(2);
-    balance.innerText=((Number(amountReceived.value)||0)-egg).toFixed(2);
-    return;
+  if(selectedChicken && saleMode){
+    const rate=selectedChicken==="broiler"
+      ?Number(broilerPrice.value||0)
+      :Number(countryPrice.value||0);
+    chicken=saleMode==="kg"
+      ?(Number(kgInput.value)||0)*rate
+      :Number(amountInput.value)||0;
   }
-
-  const rate=selectedChicken==="broiler"
-    ?Number(broilerPrice.value||0)
-    :Number(countryPrice.value||0);
-
-  const chicken=saleMode==="kg"
-    ?(Number(kgInput.value)||0)*rate
-    :Number(amountInput.value)||0;
 
   const total=chicken+egg;
   const bal=(Number(amountReceived.value)||0)-total;
@@ -254,16 +290,15 @@ function calculate(){
   balance.style.color=bal>=0?"green":"red";
 }
 
-/* ---------------- NEXT CUSTOMER ---------------- */
-nextCustomerBtn.onclick=()=>{
+function nextCustomer(){
   const bill=Number(grandTotal.innerText)||0;
   if(bill>0){
     dailySales+=bill;
     localStorage.setItem("dailySales",dailySales);
     dailyTotal.innerText=dailySales.toFixed(2);
   }
-  kgInput.value=amountInput.value=eggQty.value=amountReceived.value="";
-};
+  document.querySelectorAll(".field input").forEach(i=>i.value="");
+}
 </script>
 
 </body>
