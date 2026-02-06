@@ -22,7 +22,7 @@ body {
   gap: 24px;
 }
 
-/* 🌈 TOP PRICES */
+/* TOP PRICES */
 .prices {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -32,10 +32,7 @@ body {
   background: linear-gradient(135deg, #c7d2fe, #e0e7ff);
 }
 
-.price-box label {
-  font-weight: 700;
-}
-
+.price-box label { font-weight: 700; }
 .price-box input {
   width: 100%;
   padding: 12px;
@@ -79,18 +76,13 @@ body {
   font-weight: 700;
   cursor: pointer;
   background: #f1f5f9;
-  transition: all .2s ease;
 }
 
 .icon-btn.active {
   background: linear-gradient(135deg, #fde68a, #fbbf24);
-  box-shadow: 0 10px 20px rgba(251,191,36,.6);
 }
 
-.field label {
-  font-weight: 700;
-}
-
+.field label { font-weight: 700; }
 .field input {
   width: 100%;
   padding: 12px;
@@ -115,9 +107,7 @@ body {
   margin-bottom: 12px;
 }
 
-.total-box span {
-  font-size: 26px;
-}
+.total-box span { font-size: 26px; }
 
 #balance {
   font-size: 30px;
@@ -134,6 +124,7 @@ button.next {
   color: white;
   font-size: 16px;
   font-weight: 700;
+  cursor: pointer;
 }
 
 @media(max-width:900px){
@@ -217,92 +208,110 @@ button.next {
 </div>
 
 <script>
-/* DAILY RESET */
-const today=new Date().toISOString().slice(0,10);
-if(localStorage.getItem("salesDate")!==today){
-  localStorage.setItem("salesDate",today);
-  localStorage.setItem("dailySales","0");
+/* ✅ SAFE LOCAL DATE (NO UTC BUG) */
+function getLocalDateKey() {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+         String(d.getMonth()+1).padStart(2,"0") + "-" +
+         String(d.getDate()).padStart(2,"0");
 }
-let dailySales=Number(localStorage.getItem("dailySales"))||0;
-dailyTotal.innerText=dailySales.toFixed(2);
+
+/* 🔄 DAILY RESET (SALES ONLY) */
+const todayKey = getLocalDateKey();
+const savedDate = localStorage.getItem("salesDate");
+
+if (savedDate !== todayKey) {
+  localStorage.setItem("salesDate", todayKey);
+  localStorage.setItem("dailySales", "0");
+}
+
+let dailySales = Number(localStorage.getItem("dailySales")) || 0;
+dailyTotal.innerText = dailySales.toFixed(2);
 
 /* STATE */
-let selectedChicken=null;
-let saleMode=null;
+let selectedChicken = null;
+let saleMode = null;
 
-/* CHICKEN ICONS */
-broilerBtn.onclick=()=>selectChicken("broiler");
-countryBtn.onclick=()=>selectChicken("country");
+/* ICON LOGIC */
+broilerBtn.onclick = () => selectChicken("broiler");
+countryBtn.onclick = () => selectChicken("country");
 
-function selectChicken(type){
-  selectedChicken=type;
-  broilerBtn.classList.toggle("active",type==="broiler");
-  countryBtn.classList.toggle("active",type==="country");
+function selectChicken(type) {
+  selectedChicken = type;
+  broilerBtn.classList.toggle("active", type === "broiler");
+  countryBtn.classList.toggle("active", type === "country");
   calculate();
 }
 
-/* SALE MODE ICONS */
-kgMode.onclick=()=>setMode("kg");
-rsMode.onclick=()=>setMode("rs");
+kgMode.onclick = () => setMode("kg");
+rsMode.onclick = () => setMode("rs");
 
-function setMode(mode){
-  saleMode=mode;
-  kgMode.classList.toggle("active",mode==="kg");
-  rsMode.classList.toggle("active",mode==="rs");
-  kgBlock.style.display=mode==="kg"?"block":"none";
-  amountBlock.style.display=mode==="rs"?"block":"none";
-  kgInput.value=amountInput.value="";
+function setMode(mode) {
+  saleMode = mode;
+  kgMode.classList.toggle("active", mode === "kg");
+  rsMode.classList.toggle("active", mode === "rs");
+  kgBlock.style.display = mode === "kg" ? "block" : "none";
+  amountBlock.style.display = mode === "rs" ? "block" : "none";
+  kgInput.value = amountInput.value = "";
   calculate();
 }
 
-/* PRICES SAVE */
-function savePrices(){
-  localStorage.setItem("broiler",broilerPrice.value);
-  localStorage.setItem("country",countryPrice.value);
-  localStorage.setItem("egg",eggPrice.value);
+/* SAVE + LOAD PRICES */
+function savePrices() {
+  localStorage.setItem("broiler", broilerPrice.value);
+  localStorage.setItem("country", countryPrice.value);
+  localStorage.setItem("egg", eggPrice.value);
 }
-function loadPrices(){
-  broilerPrice.value=localStorage.getItem("broiler")||"";
-  countryPrice.value=localStorage.getItem("country")||"";
-  eggPrice.value=localStorage.getItem("egg")||"";
+function loadPrices() {
+  broilerPrice.value = localStorage.getItem("broiler") || "";
+  countryPrice.value = localStorage.getItem("country") || "";
+  eggPrice.value = localStorage.getItem("egg") || "";
 }
 loadPrices();
-broilerPrice.oninput=countryPrice.oninput=eggPrice.oninput=savePrices;
+broilerPrice.oninput = countryPrice.oninput = eggPrice.oninput = savePrices;
 
 /* CALC */
-document.querySelectorAll("input").forEach(el=>el.oninput=calculate);
+document.querySelectorAll("input").forEach(el => el.oninput = calculate);
 
-function calculate(){
-  if(!selectedChicken || !saleMode){
-    chickenTotal.innerText="0.00";
-    eggTotal.innerText=((Number(eggQty.value)||0)*(Number(eggPrice.value)||0)).toFixed(2);
-    grandTotal.innerText=eggTotal.innerText;
-    balance.innerText=((Number(amountReceived.value)||0)-(Number(grandTotal.innerText)||0)).toFixed(2);
+function calculate() {
+  const egg = (Number(eggQty.value)||0) * (Number(eggPrice.value)||0);
+
+  if (!selectedChicken || !saleMode) {
+    chickenTotal.innerText = "0.00";
+    eggTotal.innerText = egg.toFixed(2);
+    grandTotal.innerText = egg.toFixed(2);
+    balance.innerText = ((Number(amountReceived.value)||0) - egg).toFixed(2);
     return;
   }
 
-  const rate=selectedChicken==="broiler"?Number(broilerPrice.value||0):Number(countryPrice.value||0);
-  const chicken=saleMode==="kg"?(Number(kgInput.value)||0)*rate:Number(amountInput.value)||0;
-  const egg=(Number(eggQty.value)||0)*(Number(eggPrice.value)||0);
-  const total=chicken+egg;
-  const bal=(Number(amountReceived.value)||0)-total;
+  const rate = selectedChicken === "broiler"
+    ? Number(broilerPrice.value||0)
+    : Number(countryPrice.value||0);
 
-  chickenTotal.innerText=chicken.toFixed(2);
-  eggTotal.innerText=egg.toFixed(2);
-  grandTotal.innerText=total.toFixed(2);
-  balance.innerText=bal.toFixed(2);
-  balance.style.color=bal>=0?"green":"red";
+  const chicken =
+    saleMode === "kg"
+      ? (Number(kgInput.value)||0) * rate
+      : Number(amountInput.value)||0;
+
+  const total = chicken + egg;
+  const bal = (Number(amountReceived.value)||0) - total;
+
+  chickenTotal.innerText = chicken.toFixed(2);
+  eggTotal.innerText = egg.toFixed(2);
+  grandTotal.innerText = total.toFixed(2);
+  balance.innerText = bal.toFixed(2);
+  balance.style.color = bal >= 0 ? "green" : "red";
 }
 
 /* NEXT CUSTOMER */
-nextCustomerBtn.onclick=()=>{
-  const bill=Number(grandTotal.innerText)||0;
-  if(bill>0){
-    dailySales+=bill;
-    localStorage.setItem("dailySales",dailySales);
-    dailyTotal.innerText=dailySales.toFixed(2);
+nextCustomerBtn.onclick = () => {
+  const bill = Number(grandTotal.innerText) || 0;
+  if (bill > 0) {
+    dailySales += bill;
+    localStorage.setItem("dailySales", dailySales);
+    dailyTotal.innerText = dailySales.toFixed(2);
   }
-  kgInput.value=amountInput.value=eggQty.value=amountReceived.value="";
+  kgInput.value = amountInput.value = eggQty.value = amountReceived.value = "";
 };
 </script>
 
