@@ -3,25 +3,18 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- 🔒 IMPORTANT: Disable zoom -->
+<!-- 🔒 Disable zoom & system keyboard -->
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Chicken Shop POS</title>
 
 <style>
-/* 🔒 POS SAFE SETTINGS */
 html, body {
   touch-action: manipulation;
-  -webkit-text-size-adjust: 100%;
   -webkit-user-select: none;
   user-select: none;
 }
-
-button, input {
-  touch-action: manipulation;
-}
-
 * { box-sizing: border-box }
 
 body {
@@ -31,21 +24,15 @@ body {
   margin: 0;
 }
 
-.app {
-  max-width: 1200px;
-  margin: auto;
-  display: grid;
-  gap: 16px;
-}
+.app { max-width: 1200px; margin: auto; display: grid; gap: 16px }
 
-/* PRICE BAR */
 .prices {
   display: grid;
   grid-template-columns: repeat(3,1fr);
   gap: 12px;
-  background: linear-gradient(135deg,#c7d2fe,#e0e7ff);
   padding: 14px;
   border-radius: 18px;
+  background: linear-gradient(135deg,#c7d2fe,#e0e7ff);
 }
 
 .price-box label { font-weight: 700 }
@@ -53,34 +40,23 @@ body {
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  border: none;
   border-radius: 14px;
+  border: 2px solid transparent;
 }
+.price-box input.active { border-color:#6366f1 }
 
-/* MAIN LAYOUT */
-.main {
-  display: grid;
-  grid-template-columns: 2fr 1.3fr;
-  gap: 16px;
-}
+.main { display: grid; grid-template-columns: 2fr 1.3fr; gap: 16px }
 
-/* BILLING */
 .billing {
   background: linear-gradient(135deg,#fff7ed,#ffedd5);
   border-radius: 22px;
   padding: 16px;
 }
 
-.billing h3 {
-  text-align: center;
-  margin-top: 0;
-}
+.billing h3 { text-align: center }
 
-/* ICONS */
 .icon-group {
-  display: flex;
-  gap: 10px;
-  margin: 8px 0 12px;
+  display: flex; gap: 10px; margin: 8px 0 12px;
 }
 
 .icon-btn {
@@ -88,19 +64,15 @@ body {
   padding: 14px 0;
   border-radius: 18px;
   border: none;
-  font-size: 16px;
   font-weight: 700;
   background: #f1f5f9;
 }
-
 .icon-btn.active {
   background: linear-gradient(135deg,#fde68a,#fbbf24);
 }
 
-/* INPUTS */
 .field { margin-bottom: 8px }
 .field label { font-weight: 700 }
-
 .field input {
   width: 100%;
   padding: 12px;
@@ -108,12 +80,8 @@ body {
   border-radius: 14px;
   border: 2px solid transparent;
 }
+.field input.active { border-color:#6366f1 }
 
-.field input.active {
-  border-color: #6366f1;
-}
-
-/* TOTALS */
 .totals {
   background: linear-gradient(135deg,#ecfeff,#cffafe);
   border-radius: 22px;
@@ -121,26 +89,24 @@ body {
 }
 
 .total-box {
-  background: #fff;
+  background: white;
   border-radius: 16px;
   padding: 12px;
   font-weight: 700;
   margin-bottom: 8px;
   text-align: center;
 }
-
 .total-box span { font-size: 24px }
+
 #balance { font-size: 28px }
 
-/* BUTTON */
 .next {
   width: 100%;
   padding: 14px;
   border-radius: 16px;
   border: none;
   background: #6366f1;
-  color: #fff;
-  font-size: 16px;
+  color: white;
   font-weight: 700;
 }
 
@@ -154,23 +120,21 @@ body {
   grid-template-columns: repeat(3,1fr);
   gap: 10px;
 }
-
 .keypad button {
   padding: 18px;
   font-size: 22px;
-  font-weight: 700;
   border-radius: 14px;
   border: none;
   background: #374151;
   color: white;
+  font-weight: 700;
 }
-
-.keypad .del { background: #ef4444 }
-.keypad .clr { background: #6366f1 }
+.keypad .del { background:#ef4444 }
+.keypad .clr { background:#6366f1 }
 
 @media(max-width:900px){
-  .main { grid-template-columns: 1fr }
-  .prices { grid-template-columns: 1fr }
+  .main{ grid-template-columns: 1fr }
+  .prices{ grid-template-columns: 1fr }
 }
 </style>
 </head>
@@ -183,15 +147,15 @@ body {
 <div class="prices">
   <div class="price-box">
     <label>🐔 Broiler ₹/Kg</label>
-    <input id="broilerPrice">
+    <input id="broilerPrice" readonly>
   </div>
   <div class="price-box">
     <label>🐓 Country ₹/Kg</label>
-    <input id="countryPrice">
+    <input id="countryPrice" readonly>
   </div>
   <div class="price-box">
     <label>🥚 Egg ₹</label>
-    <input id="eggPrice">
+    <input id="eggPrice" readonly>
   </div>
 </div>
 
@@ -201,36 +165,34 @@ body {
 <div class="billing">
 <h3>🧾 Billing</h3>
 
-<label>🐔 Chicken Type</label>
 <div class="icon-group">
   <button class="icon-btn" onclick="selectChicken(this,'broiler')">🐔 Broiler</button>
   <button class="icon-btn" onclick="selectChicken(this,'country')">🐓 Country</button>
 </div>
 
-<label>⚖️ Sale Mode</label>
 <div class="icon-group">
   <button class="icon-btn" onclick="setMode(this,'kg')">⚖️ KG</button>
   <button class="icon-btn" onclick="setMode(this,'rs')">💰 ₹</button>
 </div>
 
 <div class="field" id="kgBlock" style="display:none">
-<label>Weight KG</label>
-<input id="kgInput" readonly>
+  <label>Weight KG</label>
+  <input id="kgInput" readonly>
 </div>
 
 <div class="field" id="amountBlock" style="display:none">
-<label>Amount ₹</label>
-<input id="amountInput" readonly>
+  <label>Amount ₹</label>
+  <input id="amountInput" readonly>
 </div>
 
 <div class="field">
-<label>🥚 Egg Units</label>
-<input id="eggQty" readonly>
+  <label>🥚 Egg Units</label>
+  <input id="eggQty" readonly>
 </div>
 
 <div class="field">
-<label>💵 Amount Received</label>
-<input id="amountReceived" readonly>
+  <label>💵 Amount Received</label>
+  <input id="amountReceived" readonly>
 </div>
 
 <button class="next" onclick="nextCustomer()">🧾 Next Customer</button>
@@ -265,7 +227,40 @@ body {
 </div>
 
 <script>
-/* ---------- DATE SAFE ---------- */
+/* ---------- ACTIVE INPUT ---------- */
+let active=null;
+document.querySelectorAll("input").forEach(i=>{
+  i.onclick=()=>{
+    document.querySelectorAll("input").forEach(x=>x.classList.remove("active"));
+    i.classList.add("active");
+    active=i;
+  };
+});
+
+function press(v){ if(active){ active.value+=v; calc(); savePrices(); } }
+function back(){ if(active){ active.value=active.value.slice(0,-1); calc(); savePrices(); } }
+function clearField(){ if(active){ active.value=""; calc(); savePrices(); } }
+
+/* ---------- STATE ---------- */
+let chicken=null, mode=null;
+
+/* ---------- SELECTION ---------- */
+function selectChicken(btn,t){
+  chicken=t;
+  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  calc();
+}
+function setMode(btn,m){
+  mode=m;
+  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  kgBlock.style.display=m==="kg"?"block":"none";
+  amountBlock.style.display=m==="rs"?"block":"none";
+  calc();
+}
+
+/* ---------- STORAGE ---------- */
 function dateKey(){
  const d=new Date();
  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
@@ -277,15 +272,6 @@ if(localStorage.getItem("salesDate")!==dateKey()){
 let dailySales=Number(localStorage.getItem("dailySales"))||0;
 dailyTotal.innerText=dailySales.toFixed(2);
 
-/* ---------- PRICES ---------- */
-function loadPrices(){
- const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
- if(p.broiler) broilerPrice.value=p.broiler;
- if(p.country) countryPrice.value=p.country;
- if(p.egg) eggPrice.value=p.egg;
-}
-loadPrices();
-
 function savePrices(){
  localStorage.setItem("shopPrices",JSON.stringify({
   broiler:broilerPrice.value,
@@ -293,47 +279,19 @@ function savePrices(){
   egg:eggPrice.value
  }));
 }
-broilerPrice.oninput=countryPrice.oninput=eggPrice.oninput=savePrices;
-
-/* ---------- STATE ---------- */
-let chicken=null;
-let mode=null;
-let active=null;
-
-/* INPUT SELECT */
-document.querySelectorAll("input").forEach(i=>{
- i.onclick=()=>{
-  document.querySelectorAll("input").forEach(x=>x.classList.remove("active"));
-  i.classList.add("active");
-  active=i;
- }
-});
-
-function press(v){ if(active){ active.value+=v; calc(); } }
-function back(){ if(active){ active.value=active.value.slice(0,-1); calc(); } }
-function clearField(){ if(active){ active.value=""; calc(); } }
-
-/* ICON LOGIC */
-function selectChicken(btn,type){
- chicken=type;
- btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
- btn.classList.add("active");
- calc();
+function loadPrices(){
+ const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
+ if(p.broiler!==undefined) broilerPrice.value=p.broiler;
+ if(p.country!==undefined) countryPrice.value=p.country;
+ if(p.egg!==undefined) eggPrice.value=p.egg;
 }
-function setMode(btn,m){
- mode=m;
- btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
- btn.classList.add("active");
- kgBlock.style.display=m==="kg"?"block":"none";
- amountBlock.style.display=m==="rs"?"block":"none";
- calc();
-}
+loadPrices();
 
-/* CALC */
+/* ---------- CALC ---------- */
 function calc(){
  const egg=(Number(eggQty.value)||0)*(Number(eggPrice.value)||0);
  let chickenAmt=0;
- if(chicken && mode){
+ if(chicken&&mode){
   const rate=chicken==="broiler"?Number(broilerPrice.value||0):Number(countryPrice.value||0);
   chickenAmt=mode==="kg"?(Number(kgInput.value)||0)*rate:Number(amountInput.value)||0;
  }
@@ -347,7 +305,7 @@ function calc(){
  balance.style.color=bal>=0?"green":"red";
 }
 
-/* NEXT */
+/* ---------- NEXT ---------- */
 function nextCustomer(){
  const bill=Number(grandTotal.innerText)||0;
  if(bill>0){
@@ -355,7 +313,7 @@ function nextCustomer(){
   localStorage.setItem("dailySales",dailySales);
   dailyTotal.innerText=dailySales.toFixed(2);
  }
- document.querySelectorAll(".field input").forEach(i=>i.value="");
+ document.querySelectorAll("input").forEach(i=>i.value="");
 }
 </script>
 
