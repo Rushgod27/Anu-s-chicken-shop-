@@ -2,101 +2,175 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
+<!-- 🔒 IMPORTANT: Disable zoom -->
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Chicken Shop POS</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{box-sizing:border-box}
-body{
-  font-family:"Segoe UI",system-ui;
-  background:linear-gradient(135deg,#fdf6f0,#eef2ff);
-  padding:20px;color:#2f2f2f
+/* 🔒 POS SAFE SETTINGS */
+html, body {
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  -webkit-user-select: none;
+  user-select: none;
 }
-.app{max-width:1200px;margin:auto;display:grid;gap:20px}
+
+button, input {
+  touch-action: manipulation;
+}
+
+* { box-sizing: border-box }
+
+body {
+  font-family: "Segoe UI", system-ui;
+  background: linear-gradient(135deg,#fdf6f0,#eef2ff);
+  padding: 16px;
+  margin: 0;
+}
+
+.app {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  gap: 16px;
+}
 
 /* PRICE BAR */
-.prices{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:16px;padding:16px;border-radius:18px;
-  background:linear-gradient(135deg,#c7d2fe,#e0e7ff)
-}
-.price-box label{font-weight:700}
-.price-box input{
-  width:100%;padding:12px;border:none;
-  border-radius:14px;font-size:16px
+.prices {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  background: linear-gradient(135deg,#c7d2fe,#e0e7ff);
+  padding: 14px;
+  border-radius: 18px;
 }
 
-/* MAIN */
-.main{display:grid;grid-template-columns:2fr 1.2fr;gap:20px}
+.price-box label { font-weight: 700 }
+.price-box input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 14px;
+}
+
+/* MAIN LAYOUT */
+.main {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr;
+  gap: 16px;
+}
 
 /* BILLING */
-.billing{
-  background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  padding:20px;border-radius:22px
+.billing {
+  background: linear-gradient(135deg,#fff7ed,#ffedd5);
+  border-radius: 22px;
+  padding: 16px;
 }
-.billing h3{text-align:center;font-size:24px}
 
-/* ICON GROUP */
-.icon-group{display:flex;gap:12px;margin:10px 0}
-.icon-btn{
-  flex:1;padding:14px 0;border-radius:18px;
-  border:none;font-size:16px;font-weight:700;
-  background:#f1f5f9;cursor:pointer
+.billing h3 {
+  text-align: center;
+  margin-top: 0;
 }
-.icon-btn.active{background:#fbbf24}
+
+/* ICONS */
+.icon-group {
+  display: flex;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+.icon-btn {
+  flex: 1;
+  padding: 14px 0;
+  border-radius: 18px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  background: #f1f5f9;
+}
+
+.icon-btn.active {
+  background: linear-gradient(135deg,#fde68a,#fbbf24);
+}
 
 /* INPUTS */
-.field{margin-bottom:10px}
-.field label{font-weight:700}
-.field input{
-  width:100%;padding:12px;font-size:16px;
-  border-radius:14px;border:2px solid transparent
+.field { margin-bottom: 8px }
+.field label { font-weight: 700 }
+
+.field input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 14px;
+  border: 2px solid transparent;
 }
-.field input.active{
-  border-color:#6366f1;
-  box-shadow:0 0 0 3px rgba(99,102,241,.3)
+
+.field input.active {
+  border-color: #6366f1;
 }
 
 /* TOTALS */
-.totals{
-  background:linear-gradient(135deg,#ecfeff,#cffafe);
-  padding:16px;border-radius:22px
-}
-.total-box{
-  background:white;border-radius:16px;
-  padding:14px;text-align:center;
-  font-weight:700;margin-bottom:10px
-}
-.total-box span{font-size:24px}
-#balance{font-size:28px;font-weight:900}
-
-/* NEXT */
-button.next{
-  width:100%;margin-top:10px;
-  padding:14px;border-radius:16px;
-  border:none;background:#6366f1;
-  color:white;font-size:16px;font-weight:700
+.totals {
+  background: linear-gradient(135deg,#ecfeff,#cffafe);
+  border-radius: 22px;
+  padding: 14px;
 }
 
-/* NUMBER PAD */
-.keypad{
-  background:#111827;
-  padding:14px;border-radius:20px;
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:10px;margin-top:10px
+.total-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: center;
 }
-.keypad button{
-  padding:18px;font-size:20px;
-  border:none;border-radius:14px;
-  background:#374151;color:white;
-  font-weight:700
+
+.total-box span { font-size: 24px }
+#balance { font-size: 28px }
+
+/* BUTTON */
+.next {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  background: #6366f1;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
 }
-.keypad button.action{background:#ef4444}
-.keypad button.clear{background:#6366f1}
+
+/* KEYPAD */
+.keypad {
+  margin-top: 10px;
+  background: #111827;
+  border-radius: 18px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 10px;
+}
+
+.keypad button {
+  padding: 18px;
+  font-size: 22px;
+  font-weight: 700;
+  border-radius: 14px;
+  border: none;
+  background: #374151;
+  color: white;
+}
+
+.keypad .del { background: #ef4444 }
+.keypad .clr { background: #6366f1 }
 
 @media(max-width:900px){
-  .main{grid-template-columns:1fr}
-  .prices{grid-template-columns:1fr}
+  .main { grid-template-columns: 1fr }
+  .prices { grid-template-columns: 1fr }
 }
 </style>
 </head>
@@ -109,15 +183,15 @@ button.next{
 <div class="prices">
   <div class="price-box">
     <label>🐔 Broiler ₹/Kg</label>
-    <input id="broilerPrice" type="number">
+    <input id="broilerPrice">
   </div>
   <div class="price-box">
     <label>🐓 Country ₹/Kg</label>
-    <input id="countryPrice" type="number">
+    <input id="countryPrice">
   </div>
   <div class="price-box">
     <label>🥚 Egg ₹</label>
-    <input id="eggPrice" type="number">
+    <input id="eggPrice">
   </div>
 </div>
 
@@ -129,34 +203,34 @@ button.next{
 
 <label>🐔 Chicken Type</label>
 <div class="icon-group">
-  <button class="icon-btn" onclick="selectChicken('broiler')">🐔 Broiler</button>
-  <button class="icon-btn" onclick="selectChicken('country')">🐓 Country</button>
+  <button class="icon-btn" onclick="selectChicken(this,'broiler')">🐔 Broiler</button>
+  <button class="icon-btn" onclick="selectChicken(this,'country')">🐓 Country</button>
 </div>
 
 <label>⚖️ Sale Mode</label>
 <div class="icon-group">
-  <button class="icon-btn" onclick="setMode('kg')">⚖️ KG</button>
-  <button class="icon-btn" onclick="setMode('rs')">💰 ₹</button>
+  <button class="icon-btn" onclick="setMode(this,'kg')">⚖️ KG</button>
+  <button class="icon-btn" onclick="setMode(this,'rs')">💰 ₹</button>
 </div>
 
 <div class="field" id="kgBlock" style="display:none">
-  <label>Weight (KG)</label>
-  <input id="kgInput" readonly>
+<label>Weight KG</label>
+<input id="kgInput" readonly>
 </div>
 
 <div class="field" id="amountBlock" style="display:none">
-  <label>Amount (₹)</label>
-  <input id="amountInput" readonly>
+<label>Amount ₹</label>
+<input id="amountInput" readonly>
 </div>
 
 <div class="field">
-  <label>🥚 Egg Units</label>
-  <input id="eggQty" readonly>
+<label>🥚 Egg Units</label>
+<input id="eggQty" readonly>
 </div>
 
 <div class="field">
-  <label>💵 Amount Received</label>
-  <input id="amountReceived" readonly>
+<label>💵 Amount Received</label>
+<input id="amountReceived" readonly>
 </div>
 
 <button class="next" onclick="nextCustomer()">🧾 Next Customer</button>
@@ -164,140 +238,124 @@ button.next{
 
 <!-- TOTALS + KEYPAD -->
 <div class="totals">
-  <div class="total-box">🐔 Chicken ₹<span id="chickenTotal">0.00</span></div>
-  <div class="total-box">🥚 Egg ₹<span id="eggTotal">0.00</span></div>
-  <div class="total-box">💰 Total ₹<span id="grandTotal">0.00</span></div>
-  <div class="total-box">🔁 Balance ₹<span id="balance">0.00</span></div>
-  <div class="total-box">📊 Today ₹<span id="dailyTotal">0.00</span></div>
+<div class="total-box">🐔 ₹ <span id="chickenTotal">0.00</span></div>
+<div class="total-box">🥚 ₹ <span id="eggTotal">0.00</span></div>
+<div class="total-box">💰 ₹ <span id="grandTotal">0.00</span></div>
+<div class="total-box">🔁 ₹ <span id="balance">0.00</span></div>
+<div class="total-box">📊 ₹ <span id="dailyTotal">0.00</span></div>
 
-  <!-- NUMBER PAD -->
-  <div class="keypad">
-    <button onclick="press('7')">7</button>
-    <button onclick="press('8')">8</button>
-    <button onclick="press('9')">9</button>
-    <button onclick="press('4')">4</button>
-    <button onclick="press('5')">5</button>
-    <button onclick="press('6')">6</button>
-    <button onclick="press('1')">1</button>
-    <button onclick="press('2')">2</button>
-    <button onclick="press('3')">3</button>
-    <button onclick="press('.')">.</button>
-    <button onclick="press('0')">0</button>
-    <button class="action" onclick="backspace()">⌫</button>
-    <button class="clear" onclick="clearField()">C</button>
-  </div>
+<div class="keypad">
+<button onclick="press('7')">7</button>
+<button onclick="press('8')">8</button>
+<button onclick="press('9')">9</button>
+<button onclick="press('4')">4</button>
+<button onclick="press('5')">5</button>
+<button onclick="press('6')">6</button>
+<button onclick="press('1')">1</button>
+<button onclick="press('2')">2</button>
+<button onclick="press('3')">3</button>
+<button onclick="press('.')">.</button>
+<button onclick="press('0')">0</button>
+<button class="del" onclick="back()">⌫</button>
+<button class="clr" onclick="clearField()">C</button>
+</div>
 </div>
 
 </div>
 </div>
 
 <script>
-/* ---------- STORAGE ---------- */
+/* ---------- DATE SAFE ---------- */
 function dateKey(){
-  const d=new Date();
-  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+ const d=new Date();
+ return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 }
 if(localStorage.getItem("salesDate")!==dateKey()){
-  localStorage.setItem("salesDate",dateKey());
-  localStorage.setItem("dailySales","0");
+ localStorage.setItem("salesDate",dateKey());
+ localStorage.setItem("dailySales","0");
 }
 let dailySales=Number(localStorage.getItem("dailySales"))||0;
 dailyTotal.innerText=dailySales.toFixed(2);
 
+/* ---------- PRICES ---------- */
 function loadPrices(){
-  const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
-  if(p.broiler!==undefined) broilerPrice.value=p.broiler;
-  if(p.country!==undefined) countryPrice.value=p.country;
-  if(p.egg!==undefined) eggPrice.value=p.egg;
+ const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
+ if(p.broiler) broilerPrice.value=p.broiler;
+ if(p.country) countryPrice.value=p.country;
+ if(p.egg) eggPrice.value=p.egg;
 }
 loadPrices();
 
 function savePrices(){
-  localStorage.setItem("shopPrices",JSON.stringify({
-    broiler:broilerPrice.value,
-    country:countryPrice.value,
-    egg:eggPrice.value
-  }));
+ localStorage.setItem("shopPrices",JSON.stringify({
+  broiler:broilerPrice.value,
+  country:countryPrice.value,
+  egg:eggPrice.value
+ }));
 }
 broilerPrice.oninput=countryPrice.oninput=eggPrice.oninput=savePrices;
 
 /* ---------- STATE ---------- */
-let selectedChicken=null;
-let saleMode=null;
-let activeInput=null;
+let chicken=null;
+let mode=null;
+let active=null;
 
-/* INPUT FOCUS */
+/* INPUT SELECT */
 document.querySelectorAll("input").forEach(i=>{
-  i.onclick=()=>{
-    document.querySelectorAll(".field input").forEach(x=>x.classList.remove("active"));
-    i.classList.add("active");
-    activeInput=i;
-  };
+ i.onclick=()=>{
+  document.querySelectorAll("input").forEach(x=>x.classList.remove("active"));
+  i.classList.add("active");
+  active=i;
+ }
 });
 
-function press(v){
-  if(!activeInput) return;
-  activeInput.value+=v;
-  calculate();
-}
-function backspace(){
-  if(!activeInput) return;
-  activeInput.value=activeInput.value.slice(0,-1);
-  calculate();
-}
-function clearField(){
-  if(!activeInput) return;
-  activeInput.value="";
-  calculate();
-}
+function press(v){ if(active){ active.value+=v; calc(); } }
+function back(){ if(active){ active.value=active.value.slice(0,-1); calc(); } }
+function clearField(){ if(active){ active.value=""; calc(); } }
 
-/* SELECTION */
-function selectChicken(t){
-  selectedChicken=t;
-  document.querySelectorAll(".icon-group button").forEach(b=>b.classList.remove("active"));
-  event.target.classList.add("active");
-  calculate();
+/* ICON LOGIC */
+function selectChicken(btn,type){
+ chicken=type;
+ btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ calc();
+}
+function setMode(btn,m){
+ mode=m;
+ btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ kgBlock.style.display=m==="kg"?"block":"none";
+ amountBlock.style.display=m==="rs"?"block":"none";
+ calc();
 }
 
-function setMode(m){
-  saleMode=m;
-  kgBlock.style.display=m==="kg"?"block":"none";
-  amountBlock.style.display=m==="rs"?"block":"none";
-  calculate();
+/* CALC */
+function calc(){
+ const egg=(Number(eggQty.value)||0)*(Number(eggPrice.value)||0);
+ let chickenAmt=0;
+ if(chicken && mode){
+  const rate=chicken==="broiler"?Number(broilerPrice.value||0):Number(countryPrice.value||0);
+  chickenAmt=mode==="kg"?(Number(kgInput.value)||0)*rate:Number(amountInput.value)||0;
+ }
+ const total=egg+chickenAmt;
+ const bal=(Number(amountReceived.value)||0)-total;
+
+ chickenTotal.innerText=chickenAmt.toFixed(2);
+ eggTotal.innerText=egg.toFixed(2);
+ grandTotal.innerText=total.toFixed(2);
+ balance.innerText=bal.toFixed(2);
+ balance.style.color=bal>=0?"green":"red";
 }
 
-/* CALCULATION */
-function calculate(){
-  const egg=(Number(eggQty.value)||0)*(Number(eggPrice.value)||0);
-  let chicken=0;
-
-  if(selectedChicken && saleMode){
-    const rate=selectedChicken==="broiler"
-      ?Number(broilerPrice.value||0)
-      :Number(countryPrice.value||0);
-    chicken=saleMode==="kg"
-      ?(Number(kgInput.value)||0)*rate
-      :Number(amountInput.value)||0;
-  }
-
-  const total=chicken+egg;
-  const bal=(Number(amountReceived.value)||0)-total;
-
-  chickenTotal.innerText=chicken.toFixed(2);
-  eggTotal.innerText=egg.toFixed(2);
-  grandTotal.innerText=total.toFixed(2);
-  balance.innerText=bal.toFixed(2);
-  balance.style.color=bal>=0?"green":"red";
-}
-
+/* NEXT */
 function nextCustomer(){
-  const bill=Number(grandTotal.innerText)||0;
-  if(bill>0){
-    dailySales+=bill;
-    localStorage.setItem("dailySales",dailySales);
-    dailyTotal.innerText=dailySales.toFixed(2);
-  }
-  document.querySelectorAll(".field input").forEach(i=>i.value="");
+ const bill=Number(grandTotal.innerText)||0;
+ if(bill>0){
+  dailySales+=bill;
+  localStorage.setItem("dailySales",dailySales);
+  dailyTotal.innerText=dailySales.toFixed(2);
+ }
+ document.querySelectorAll(".field input").forEach(i=>i.value="");
 }
 </script>
 
