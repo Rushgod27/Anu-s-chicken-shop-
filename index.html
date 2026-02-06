@@ -12,146 +12,146 @@ html, body {
   -webkit-user-select: none;
   user-select: none;
 }
-* { box-sizing: border-box; }
+*{ box-sizing:border-box; }
 
-body {
+body{
   font-family: system-ui;
   background: linear-gradient(135deg,#fdf6f0,#eef2ff);
-  padding: 16px;
-  margin: 0;
+  padding:16px;
+  margin:0;
 }
 
-.app {
-  max-width: 1200px;
-  margin: auto;
-  display: grid;
-  gap: 16px;
-}
+.app{ max-width:1200px; margin:auto; display:grid; gap:16px }
 
 /* PRICE BAR */
-.prices {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 12px;
-  padding: 14px;
-  border-radius: 18px;
-  background: linear-gradient(135deg,#c7d2fe,#e0e7ff);
+.prices{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  padding:14px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#c7d2fe,#e0e7ff);
 }
-
-.price-box label { font-weight: 700; }
-.price-box input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 14px;
-  border: 2px solid transparent;
-  font-size: 16px;
+.price-box label{ font-weight:700 }
+.price-box input{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:2px solid transparent;
 }
-.price-box input.active { border-color:#6366f1; }
 
 /* MAIN */
-.main {
-  display: grid;
-  grid-template-columns: 2fr 1.3fr;
-  gap: 16px;
+.main{
+  display:grid;
+  grid-template-columns:2fr 1.3fr;
+  gap:16px;
 }
 
 /* BILLING */
-.billing {
-  background: linear-gradient(135deg,#fff7ed,#ffedd5);
-  padding: 16px;
-  border-radius: 22px;
+.billing{
+  background:linear-gradient(135deg,#fff7ed,#ffedd5);
+  padding:16px;
+  border-radius:22px;
 }
-.billing h3 { text-align: center; }
+.billing h3{ text-align:center }
 
 /* ICONS */
-.icon-group {
-  display: flex;
-  gap: 10px;
-  margin: 8px 0;
+.icon-group{
+  display:flex;
+  gap:10px;
+  margin:8px 0;
 }
-.icon-btn {
-  flex: 1;
-  padding: 14px 0;
-  border-radius: 18px;
-  border: none;
-  font-weight: 700;
-  background: #f1f5f9;
+.icon-btn{
+  flex:1;
+  padding:14px 0;
+  border-radius:18px;
+  border:none;
+  font-weight:700;
+  background:#f1f5f9;
 }
-.icon-btn.active {
-  background: linear-gradient(135deg,#fde68a,#fbbf24);
+.icon-btn.active{
+  background:linear-gradient(135deg,#fde68a,#fbbf24);
 }
 
 /* INPUTS */
-.field { margin-bottom: 8px; }
-.field label { font-weight: 700; }
-.field input {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 14px;
-  border: 2px solid transparent;
+.field{ margin-bottom:8px }
+.field label{ font-weight:700 }
+.field input{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:2px solid transparent;
 }
-.field input.active { border-color:#6366f1; }
+.field input.active{ border-color:#6366f1 }
+
+/* RETURN AMOUNT */
+.return-box{
+  background:#dcfce7;
+  border-radius:14px;
+  padding:12px;
+  font-weight:900;
+  text-align:center;
+  font-size:20px;
+  margin-top:6px;
+}
 
 /* TOTALS */
-.totals {
-  background: linear-gradient(135deg,#ecfeff,#cffafe);
-  padding: 14px;
-  border-radius: 22px;
+.totals{
+  background:linear-gradient(135deg,#ecfeff,#cffafe);
+  padding:14px;
+  border-radius:22px;
 }
-.total-box {
-  background: #fff;
-  border-radius: 16px;
-  padding: 12px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  text-align: center;
+.total-box{
+  background:white;
+  border-radius:16px;
+  padding:12px;
+  font-weight:700;
+  margin-bottom:8px;
+  text-align:center;
 }
-.total-box span { font-size: 24px; }
-#balance { font-size: 28px; }
+.total-box span{ font-size:24px }
 
 /* NEXT */
-.next {
-  width: 100%;
-  padding: 14px;
-  border-radius: 16px;
-  border: none;
-  background: #6366f1;
-  color: white;
-  font-weight: 700;
+.next{
+  width:100%;
+  padding:14px;
+  border-radius:16px;
+  border:none;
+  background:#6366f1;
+  color:white;
+  font-weight:700;
 }
 
 /* KEYPAD */
-.keypad {
-  margin-top: 10px;
-  background: #111827;
-  border-radius: 18px;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 10px;
-  border: 2px solid transparent;
-  transition: 0.2s ease;
+.keypad{
+  margin-top:10px;
+  background:#111827;
+  border-radius:18px;
+  padding:12px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  border:2px solid transparent;
 }
-.keypad.active {
+.keypad.active{
   border-color:#6366f1;
-  box-shadow: 0 0 0 4px rgba(99,102,241,0.4);
+  box-shadow:0 0 0 4px rgba(99,102,241,0.4);
 }
-.keypad button {
-  padding: 18px;
-  font-size: 22px;
-  border-radius: 14px;
-  border: none;
-  background: #374151;
-  color: white;
-  font-weight: 700;
+.keypad button{
+  padding:18px;
+  font-size:22px;
+  border-radius:14px;
+  border:none;
+  background:#374151;
+  color:white;
+  font-weight:700;
 }
-.keypad .del { background:#ef4444; }
-.keypad .clr { background:#6366f1; }
+.keypad .del{ background:#ef4444 }
+.keypad .clr{ background:#6366f1 }
 
 @media(max-width:900px){
-  .main { grid-template-columns: 1fr; }
-  .prices { grid-template-columns: 1fr; }
+  .main{ grid-template-columns:1fr }
+  .prices{ grid-template-columns:1fr }
 }
 </style>
 </head>
@@ -160,7 +160,7 @@ body {
 
 <div class="app">
 
-<!-- PRICES -->
+<!-- PRICES (NEVER RESET) -->
 <div class="prices">
   <div class="price-box">
     <label>🐔 Broiler ₹/Kg</label>
@@ -183,13 +183,13 @@ body {
 <h3>🧾 Billing</h3>
 
 <div class="icon-group">
-  <button class="icon-btn" onclick="selectChicken(this,'broiler')">🐔 Broiler</button>
-  <button class="icon-btn" onclick="selectChicken(this,'country')">🐓 Country</button>
+  <button class="icon-btn" id="broilerBtn" onclick="selectChicken(this,'broiler')">🐔 Broiler</button>
+  <button class="icon-btn" id="countryBtn" onclick="selectChicken(this,'country')">🐓 Country</button>
 </div>
 
 <div class="icon-group">
-  <button class="icon-btn" onclick="setMode(this,'kg')">⚖️ KG</button>
-  <button class="icon-btn" onclick="setMode(this,'rs')">💰 ₹</button>
+  <button class="icon-btn" id="kgBtn" onclick="setMode(this,'kg')">⚖️ KG</button>
+  <button class="icon-btn" id="rsBtn" onclick="setMode(this,'rs')">💰 ₹</button>
 </div>
 
 <div class="field" id="kgBlock" style="display:none">
@@ -212,6 +212,10 @@ body {
 <input id="amountReceived" readonly>
 </div>
 
+<div class="return-box">
+🔁 Return ₹ <span id="returnAmt">0.00</span>
+</div>
+
 <button class="next" onclick="nextCustomer()">🧾 Next Customer</button>
 </div>
 
@@ -220,8 +224,7 @@ body {
 <div class="total-box">🐔 ₹ <span id="chickenTotal">0.00</span></div>
 <div class="total-box">🥚 ₹ <span id="eggTotal">0.00</span></div>
 <div class="total-box">💰 ₹ <span id="grandTotal">0.00</span></div>
-<div class="total-box">🔁 ₹ <span id="balance">0.00</span></div>
-<div class="total-box">📊 ₹ <span id="dailyTotal">0.00</span></div>
+<div class="total-box">📊 Today ₹ <span id="dailyTotal">0.00</span></div>
 
 <div class="keypad" id="keypad">
 <button onclick="press('7')">7</button>
@@ -244,7 +247,7 @@ body {
 </div>
 
 <script>
-/* ---------- STORAGE ---------- */
+/* ---------- DAILY SALES ---------- */
 function dateKey(){
   const d=new Date();
   return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
@@ -256,6 +259,14 @@ if(localStorage.getItem("salesDate")!==dateKey()){
 let dailySales=Number(localStorage.getItem("dailySales"))||0;
 dailyTotal.innerText=dailySales.toFixed(2);
 
+/* ---------- PRICE STORAGE ---------- */
+function savePrices(){
+  localStorage.setItem("shopPrices",JSON.stringify({
+    broiler:broilerPrice.value,
+    country:countryPrice.value,
+    egg:eggPrice.value
+  }));
+}
 function loadPrices(){
   const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
   if(p.broiler!==undefined) broilerPrice.value=p.broiler;
@@ -264,18 +275,9 @@ function loadPrices(){
 }
 loadPrices();
 
-function savePrices(){
-  localStorage.setItem("shopPrices",JSON.stringify({
-    broiler:broilerPrice.value,
-    country:countryPrice.value,
-    egg:eggPrice.value
-  }));
-}
-
 /* ---------- ACTIVE INPUT ---------- */
 let active=null;
 const keypad=document.getElementById("keypad");
-
 document.querySelectorAll("input").forEach(i=>{
   i.onclick=()=>{
     document.querySelectorAll("input").forEach(x=>x.classList.remove("active"));
@@ -306,15 +308,19 @@ function clearField(){
 
 /* ---------- STATE ---------- */
 let chicken=null, mode=null;
+
+/* ---------- SELECTION ---------- */
 function selectChicken(btn,t){
   chicken=t;
-  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("broilerBtn").classList.remove("active");
+  document.getElementById("countryBtn").classList.remove("active");
   btn.classList.add("active");
   calc();
 }
 function setMode(btn,m){
   mode=m;
-  btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("kgBtn").classList.remove("active");
+  document.getElementById("rsBtn").classList.remove("active");
   btn.classList.add("active");
   kgBlock.style.display=m==="kg"?"block":"none";
   amountBlock.style.display=m==="rs"?"block":"none";
@@ -334,16 +340,15 @@ function calc(){
       :Number(amountInput.value)||0;
   }
   const total=egg+chickenAmt;
-  const bal=(Number(amountReceived.value)||0)-total;
+  const ret=(Number(amountReceived.value)||0)-total;
 
   chickenTotal.innerText=chickenAmt.toFixed(2);
   eggTotal.innerText=egg.toFixed(2);
   grandTotal.innerText=total.toFixed(2);
-  balance.innerText=bal.toFixed(2);
-  balance.style.color=bal>=0?"green":"red";
+  returnAmt.innerText=ret.toFixed(2);
 }
 
-/* ---------- NEXT ---------- */
+/* ---------- NEXT CUSTOMER ---------- */
 function nextCustomer(){
   const bill=Number(grandTotal.innerText)||0;
   if(bill>0){
@@ -351,12 +356,23 @@ function nextCustomer(){
     localStorage.setItem("dailySales",dailySales);
     dailyTotal.innerText=dailySales.toFixed(2);
   }
-  document.querySelectorAll("input").forEach(i=>{
-    i.value="";
-    i.classList.remove("active");
-  });
-  active=null;
-  keypad.classList.remove("active");
+
+  /* Clear BILLING ONLY */
+  kgInput.value="";
+  amountInput.value="";
+  eggQty.value="";
+  amountReceived.value="";
+  returnAmt.innerText="0.00";
+  chickenTotal.innerText="0.00";
+  eggTotal.innerText="0.00";
+  grandTotal.innerText="0.00";
+
+  /* Force re-selection (IMPORTANT) */
+  chicken=null;
+  mode=null;
+  document.querySelectorAll(".icon-btn").forEach(b=>b.classList.remove("active"));
+  kgBlock.style.display="none";
+  amountBlock.style.display="none";
 }
 </script>
 
