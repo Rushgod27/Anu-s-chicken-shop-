@@ -7,130 +7,156 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
 <title>Anu’s Chicken Shop – POS</title>
 
 <style>
-html,body{
-  touch-action:manipulation;
-  -webkit-user-select:none;
-  user-select:none;
-}
+html,body{margin:0;padding:0;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 *{box-sizing:border-box}
+body{font-family:system-ui;background:#f1f5f9;padding:16px}
 
-body{
-  font-family:system-ui;
-  background:linear-gradient(135deg,#fdf6f0,#eef2ff);
-  padding:20px;margin:0;
-}
-
+/* HEADER */
 .header{
+  background:#fbbf24;
   text-align:center;
-  background:linear-gradient(135deg,#fde68a,#fbbf24);
-  padding:20px;
-  font-size:36px;
+  font-size:34px;
   font-weight:900;
-  border-radius:26px;
-  margin-bottom:20px;
+  padding:18px;
+  border-radius:18px;
+  margin-bottom:14px
 }
 
-.app{max-width:1400px;margin:auto;display:grid;gap:20px}
-
-/* PRICES */
+/* PRICE BAR */
 .prices{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  padding:20px;
-  border-radius:22px;
-  background:linear-gradient(135deg,#c7d2fe,#e0e7ff);
+  gap:12px;
+  background:#e0e7ff;
+  padding:14px;
+  border-radius:16px;
+  margin-bottom:14px
 }
-.price-box label{font-size:20px;font-weight:800}
-.price-box input{
+.prices label{font-weight:800}
+.prices input{
   width:100%;
-  padding:18px;
-  font-size:22px;
-  border-radius:18px;
-  border:3px solid transparent;
+  padding:14px;
+  font-size:20px;
+  border-radius:14px;
 }
-.price-box input.active{border-color:#6366f1}
 
-/* MAIN */
-.main{display:grid;grid-template-columns:2.2fr 1.4fr;gap:20px}
+/* MAIN WRAPPER */
+.main{
+  display:grid;
+  grid-template-columns:2.2fr 1fr;
+  gap:14px
+}
+
+/* LEFT SIDE */
+.left{
+  display:grid;
+  gap:14px
+}
 
 /* BILLING */
 .billing{
-  background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  padding:20px;border-radius:26px;
+  background:#fff7ed;
+  padding:16px;
+  border-radius:18px
 }
-.billing h3{text-align:center;font-size:32px}
+.billing h3{text-align:center;margin:6px 0 10px}
 
-/* ICONS */
-.icon-group{display:flex;gap:16px;margin:12px 0}
-.icon-btn{
-  flex:1;padding:22px 0;font-size:22px;
-  font-weight:800;border:none;border-radius:22px;
-  background:#f1f5f9;
+.buttons{display:flex;gap:10px;margin-bottom:10px}
+.btn{
+  flex:1;
+  padding:14px;
+  font-size:20px;
+  font-weight:800;
+  border:none;
+  border-radius:14px;
+  background:#e5e7eb
 }
-.icon-btn.active{background:linear-gradient(135deg,#fde68a,#fbbf24)}
+.btn.active{background:#fbbf24}
 
-/* INPUTS */
-.field{margin-bottom:14px}
-.field label{font-size:20px;font-weight:800}
+.field{margin-bottom:8px}
+.field label{font-weight:800}
 .field input{
-  width:100%;padding:18px;font-size:22px;
-  border-radius:18px;border:3px solid transparent;
+  width:100%;
+  padding:14px;
+  font-size:20px;
+  border-radius:14px;
 }
-.field input.active{border-color:#6366f1}
 
-/* RETURN */
-.return-box{
+.return{
   background:#dcfce7;
-  border-radius:18px;
-  padding:18px;
+  padding:14px;
+  border-radius:16px;
+  margin-top:6px;
+  font-size:22px;
+  font-weight:900;
+  text-align:center
+}
+.return.negative{background:#fee2e2;color:#991b1b}
+
+.total{
+  background:#dbeafe;
+  padding:16px;
+  border-radius:16px;
+  margin-top:8px;
   font-size:26px;
   font-weight:900;
-  text-align:center;
+  text-align:center
 }
 
-/* NEXT */
 .next{
-  width:100%;padding:20px;font-size:22px;
-  font-weight:900;border:none;border-radius:22px;
-  background:#4f46e5;color:white;
-  margin-top:14px;
+  margin-top:10px;
+  width:100%;
+  padding:16px;
+  font-size:22px;
+  font-weight:900;
+  border:none;
+  border-radius:16px;
+  background:#4f46e5;
+  color:white
 }
 
-/* TOTALS */
-.totals{
-  background:linear-gradient(135deg,#ecfeff,#cffafe);
-  padding:18px;border-radius:26px;
+/* SUMMARY */
+.summary{
+  background:#ecfeff;
+  padding:16px;
+  border-radius:18px
 }
-.total-box{
-  background:white;border-radius:18px;
-  padding:18px;font-size:20px;
-  font-weight:800;margin-bottom:12px;text-align:center;
+.summary h3{text-align:center;margin-top:0}
+.box{
+  background:white;
+  padding:14px;
+  border-radius:14px;
+  font-weight:800;
+  margin-bottom:8px;
+  text-align:center;
+  font-size:18px
 }
-.total-box span{font-size:30px}
+.box span{font-size:24px}
 
-/* KEYPAD */
+/* KEYPAD (RIGHT ONLY) */
 .keypad{
-  margin-top:16px;background:#020617;
-  border-radius:24px;padding:16px;
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:14px;border:3px solid transparent;
-}
-.keypad.active{
-  border-color:#6366f1;
-  box-shadow:0 0 0 5px rgba(99,102,241,.4);
+  background:#020617;
+  padding:14px;
+  border-radius:20px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  height:fit-content
 }
 .keypad button{
-  padding:28px;font-size:30px;
-  font-weight:900;border:none;
-  border-radius:20px;background:#374151;color:white;
+  padding:26px;
+  font-size:28px;
+  font-weight:900;
+  border:none;
+  border-radius:16px;
+  background:#374151;
+  color:white
 }
 .keypad .del{background:#ef4444}
 .keypad .clr{background:#4f46e5}
 
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
-  .prices{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -139,210 +165,176 @@ body{
 
 <div class="header">🐔 Anu’s Chicken Shop</div>
 
-<div class="app">
-
 <div class="prices">
-  <div class="price-box">
-    <label>🐔 Broiler ₹/Kg</label>
-    <input id="broilerPrice" readonly>
-  </div>
-  <div class="price-box">
-    <label>🐓 Country ₹/Kg</label>
-    <input id="countryPrice" readonly>
-  </div>
-  <div class="price-box">
-    <label>🥚 Egg ₹</label>
-    <input id="eggPrice" readonly>
-  </div>
+  <div><label>Broiler ₹/Kg</label><input id="broilerPrice" readonly></div>
+  <div><label>Country ₹/Kg</label><input id="countryPrice" readonly></div>
+  <div><label>Egg ₹</label><input id="eggPrice" readonly></div>
 </div>
 
 <div class="main">
 
+<!-- LEFT PANEL -->
+<div class="left">
+
 <div class="billing">
-<h3>🧾 Billing</h3>
+<h3>🧾 Current Customer</h3>
 
-<div class="icon-group">
-  <button class="icon-btn" id="broilerBtn" onclick="selectChicken(this,'broiler')">🐔 Broiler</button>
-  <button class="icon-btn" id="countryBtn" onclick="selectChicken(this,'country')">🐓 Country</button>
+<div class="buttons">
+  <button class="btn chicken-btn" onclick="chooseChicken('broiler',this)">🐔 Broiler</button>
+  <button class="btn chicken-btn" onclick="chooseChicken('country',this)">🐓 Country</button>
 </div>
 
-<div class="icon-group">
-  <button class="icon-btn" id="kgBtn" onclick="setMode(this,'kg')">⚖️ KG</button>
-  <button class="icon-btn" id="rsBtn" onclick="setMode(this,'rs')">💰 ₹</button>
+<div class="buttons" id="modeButtons" style="display:none">
+  <button class="btn mode-btn" onclick="chooseMode('kg',this)">⚖️ KG</button>
+  <button class="btn mode-btn" onclick="chooseMode('rs',this)">₹ Amount</button>
 </div>
 
-<div class="field" id="kgBlock" style="display:none">
-<label>Weight (KG)</label>
-<input id="kgInput" readonly>
+<div class="field" id="kgField" style="display:none">
+<label>KG</label><input id="kgInput" readonly>
 </div>
 
-<div class="field" id="amountBlock" style="display:none">
-<label>Amount (₹)</label>
-<input id="amountInput" readonly>
-</div>
-
-<div class="field">
-<label>🥚 Egg Units</label>
-<input id="eggQty" readonly>
+<div class="field" id="rsField" style="display:none">
+<label>₹ Amount</label><input id="rsInput" readonly>
 </div>
 
 <div class="field">
-<label>💵 Amount Received</label>
-<input id="amountReceived" readonly>
+<label>Egg Units</label><input id="eggQty" readonly>
 </div>
 
-<div class="return-box">
-🔁 RETURN ₹ <span id="returnAmt">0.00</span>
+<div class="field">
+<label>Amount Received</label><input id="received" readonly>
 </div>
 
-<button class="next" onclick="nextCustomer()">🧾 NEXT CUSTOMER</button>
+<div class="return" id="returnBox">
+RETURN ₹ <span id="returnAmt">0.00</span>
 </div>
 
-<div class="totals">
-  <div class="total-box">🐔 Chicken ₹ <span id="chickenTotal">0.00</span></div>
-  <div class="total-box">🥚 Egg ₹ <span id="eggTotal">0.00</span></div>
-  <div class="total-box">💰 TOTAL ₹ <span id="grandTotal">0.00</span></div>
-  <div class="total-box">📊 TODAY ₹ <span id="dailyTotal">0.00</span></div>
+<div class="total">
+TOTAL ₹ <span id="billTotal">0.00</span>
+</div>
 
-  <div class="keypad" id="keypad">
-    <button onclick="press('7')">7</button>
-    <button onclick="press('8')">8</button>
-    <button onclick="press('9')">9</button>
-    <button onclick="press('4')">4</button>
-    <button onclick="press('5')">5</button>
-    <button onclick="press('6')">6</button>
-    <button onclick="press('1')">1</button>
-    <button onclick="press('2')">2</button>
-    <button onclick="press('3')">3</button>
-    <button onclick="press('.')">.</button>
-    <button onclick="press('0')">0</button>
-    <button class="del" onclick="backspace()">⌫</button>
-    <button class="clr" onclick="clearField()">C</button>
-  </div>
+<button class="next" onclick="nextCustomer()">NEXT CUSTOMER</button>
+</div>
+
+<div class="summary">
+<h3>📊 Today</h3>
+<div class="box">Sales ₹ <span id="daySales">0.00</span></div>
+<div class="box">Broiler KG <span id="broilerKg">0.00</span></div>
+<div class="box">Country KG <span id="countryKg">0.00</span></div>
+<div class="box">Eggs <span id="eggCount">0</span></div>
 </div>
 
 </div>
+
+<!-- RIGHT PANEL -->
+<div class="keypad">
+  <button onclick="press('7')">7</button>
+  <button onclick="press('8')">8</button>
+  <button onclick="press('9')">9</button>
+  <button onclick="press('4')">4</button>
+  <button onclick="press('5')">5</button>
+  <button onclick="press('6')">6</button>
+  <button onclick="press('1')">1</button>
+  <button onclick="press('2')">2</button>
+  <button onclick="press('3')">3</button>
+  <button onclick="press('.')">.</button>
+  <button onclick="press('0')">0</button>
+  <button class="del" onclick="backspace()">⌫</button>
+  <button class="clr" onclick="clearField()">C</button>
+</div>
+
 </div>
 
 <script>
-/* ========= DAILY SALES ========= */
-function dateKey(){
-  const d=new Date();
-  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-}
-if(localStorage.getItem("salesDate")!==dateKey()){
-  localStorage.setItem("salesDate",dateKey());
-  localStorage.setItem("dailySales","0");
-}
-let dailySales=Number(localStorage.getItem("dailySales"))||0;
-dailyTotal.innerText=dailySales.toFixed(2);
-
-/* ========= PRICES ========= */
-function savePrices(){
-  localStorage.setItem("shopPrices",JSON.stringify({
-    broiler:broilerPrice.value,
-    country:countryPrice.value,
-    egg:eggPrice.value
-  }));
-}
-function loadPrices(){
-  const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
-  if(p.broiler!==undefined) broilerPrice.value=p.broiler;
-  if(p.country!==undefined) countryPrice.value=p.country;
-  if(p.egg!==undefined) eggPrice.value=p.egg;
-}
-loadPrices();
-
-/* ========= ACTIVE INPUT ========= */
-let active=null;
-const keypad=document.getElementById("keypad");
-document.querySelectorAll("input").forEach(i=>{
-  i.onclick=()=>{
-    document.querySelectorAll("input").forEach(x=>x.classList.remove("active"));
-    i.classList.add("active");
-    active=i;
-    keypad.classList.add("active");
-  };
-});
-
-/* ========= KEYPAD ========= */
-function press(v){
-  if(!active) return;
-  active.value+=v;
-  savePrices();
-  calc();
-}
-function backspace(){
-  if(!active) return;
-  active.value=active.value.slice(0,-1);
-  savePrices();
-  calc();
-}
-function clearField(){
-  if(!active) return;
-  active.value="";
-  savePrices();
-  calc();
+const today=new Date().toDateString();
+if(localStorage.getItem("day")!==today){
+  localStorage.setItem("day",today);
+  localStorage.setItem("sales",0);
+  localStorage.setItem("bkg",0);
+  localStorage.setItem("ckg",0);
+  localStorage.setItem("eggs",0);
 }
 
-/* ========= BILLING ========= */
-let chicken=null, mode=null;
-function selectChicken(btn,t){
-  chicken=t;
-  document.getElementById("broilerBtn").classList.remove("active");
-  document.getElementById("countryBtn").classList.remove("active");
+let daySales=+localStorage.getItem("sales");
+let broilerKg=+localStorage.getItem("bkg");
+let countryKg=+localStorage.getItem("ckg");
+let eggCount=+localStorage.getItem("eggs");
+
+let active=null,chicken=null,mode=null;
+document.querySelectorAll("input").forEach(i=>i.onclick=()=>active=i);
+
+function press(v){if(active){active.value+=v;calc();}}
+function backspace(){if(active){active.value=active.value.slice(0,-1);calc();}}
+function clearField(){if(active){active.value="";calc();}}
+
+function chooseChicken(type,btn){
+  chicken=type;
+  document.querySelectorAll(".chicken-btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
+  modeButtons.style.display="flex";
+  mode=null;
+  kgField.style.display=rsField.style.display="none";
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
   calc();
 }
-function setMode(btn,m){
+
+function chooseMode(m,btn){
   mode=m;
-  document.getElementById("kgBtn").classList.remove("active");
-  document.getElementById("rsBtn").classList.remove("active");
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
-  kgBlock.style.display=m==="kg"?"block":"none";
-  amountBlock.style.display=m==="rs"?"block":"none";
+  kgField.style.display=m==="kg"?"block":"none";
+  rsField.style.display=m==="rs"?"block":"none";
   calc();
 }
 
-/* ========= CALC ========= */
 function calc(){
-  const egg=(Number(eggQty.value)||0)*(Number(eggPrice.value)||0);
+  const eggAmt=(+eggQty.value||0)*(+eggPrice.value||0);
   let chickenAmt=0;
   if(chicken&&mode){
-    const rate=chicken==="broiler"
-      ?Number(broilerPrice.value||0)
-      :Number(countryPrice.value||0);
-    chickenAmt=mode==="kg"
-      ?(Number(kgInput.value)||0)*rate
-      :Number(amountInput.value)||0;
+    const rate=chicken==="broiler"?+broilerPrice.value:+countryPrice.value;
+    chickenAmt=mode==="kg"?(+kgInput.value||0)*rate:(+rsInput.value||0);
   }
-  const total=egg+chickenAmt;
-  chickenTotal.innerText=chickenAmt.toFixed(2);
-  eggTotal.innerText=egg.toFixed(2);
-  grandTotal.innerText=total.toFixed(2);
-  returnAmt.innerText=((Number(amountReceived.value)||0)-total).toFixed(2);
+  const total=eggAmt+chickenAmt;
+  billTotal.innerText=total.toFixed(2);
+  const ret=(+received.value||0)-total;
+  returnAmt.innerText=ret.toFixed(2);
+  returnBox.classList.toggle("negative",ret<0);
 }
 
-/* ========= NEXT ========= */
 function nextCustomer(){
-  const bill=Number(grandTotal.innerText)||0;
-  if(bill>0){
-    dailySales+=bill;
-    localStorage.setItem("dailySales",dailySales);
-    dailyTotal.innerText=dailySales.toFixed(2);
+  const total=+billTotal.innerText||0;
+  if(total>0){
+    daySales+=total;
+    if(chicken){
+      const rate=chicken==="broiler"?+broilerPrice.value:+countryPrice.value;
+      const kg=mode==="kg"?+kgInput.value:(+rsInput.value/rate);
+      chicken==="broiler"?broilerKg+=kg:countryKg+=kg;
+    }
+    eggCount+=+eggQty.value||0;
+    localStorage.setItem("sales",daySales);
+    localStorage.setItem("bkg",broilerKg);
+    localStorage.setItem("ckg",countryKg);
+    localStorage.setItem("eggs",eggCount);
   }
-  kgInput.value="";
-  amountInput.value="";
-  eggQty.value="";
-  amountReceived.value="";
+  kgInput.value=rsInput.value=eggQty.value=received.value="";
+  billTotal.innerText="0.00";
   returnAmt.innerText="0.00";
-  chickenTotal.innerText="0.00";
-  eggTotal.innerText="0.00";
-  grandTotal.innerText="0.00";
-  chicken=null;
-  mode=null;
-  document.querySelectorAll(".icon-btn").forEach(b=>b.classList.remove("active"));
+  chicken=null;mode=null;
+  modeButtons.style.display="none";
+  kgField.style.display=rsField.style.display="none";
+  document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("daySales").innerText=daySales.toFixed(2);
+  document.getElementById("broilerKg").innerText=broilerKg.toFixed(2);
+  document.getElementById("countryKg").innerText=countryKg.toFixed(2);
+  document.getElementById("eggCount").innerText=eggCount;
 }
+
+(function(){
+  const p=JSON.parse(localStorage.getItem("prices")||"{}");
+  if(p.b)broilerPrice.value=p.b;
+  if(p.c)countryPrice.value=p.c;
+  if(p.e)eggPrice.value=p.e;
+})();
 </script>
 
 </body>
