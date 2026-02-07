@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory – Anu’s Chicken Shop</title>
+
+<style>
+:root{
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --primary:#16a34a;
+  --secondary:#0ea5e9;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e2e8f0;
+}
+
+*{box-sizing:border-box}
+
+body{
+  font-family:system-ui,-apple-system,BlinkMacSystemFont;
+  background:var(--bg);
+  margin:0;
+  padding:14px;
+  color:var(--text);
+}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:white;
+  padding:18px;
+  font-size:26px;
+  font-weight:900;
+  text-align:center;
+  border-radius:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+
+/* CONTAINER */
+.wrapper{
+  max-width:1100px;
+  margin:auto;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  padding:20px;
+  border-radius:22px;
+  margin-top:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,.05);
+}
+
+/* SECTION TITLE */
+.section{
+  margin-top:26px;
+}
+
+.section h3{
+  margin:0 0 14px;
+  font-size:22px;
+  font-weight:900;
+}
+
+/* LABEL + INPUT */
+label{
+  font-size:15px;
+  font-weight:800;
+  color:var(--muted);
+  margin-bottom:6px;
+  display:block;
+}
+
+input{
+  width:100%;
+  padding:16px;
+  font-size:20px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  transition:.2s;
+  background:#fff;
+}
+
+input:focus{
+  outline:none;
+  border-color:var(--secondary);
+  box-shadow:0 0 0 3px rgba(14,165,233,.15);
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:16px;
+}
+
+/* DATE */
+.date-box{
+  max-width:260px;
+}
+
+/* SAVE BUTTON */
+button{
+  margin-top:28px;
+  width:100%;
+  padding:20px;
+  font-size:22px;
+  font-weight:900;
+  border:none;	
+  border-radius:20px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(34,197,94,.35);
+}
+
+button:active{
+  transform:scale(.98);
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+  .date-box{max-width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="header">
+📦 Inventory – Daily Purchase
+</div>
+
+<div class="card">
+
+<!-- DATE -->
+<div class="date-box">
+  <label>Date</label>
+  <input type="date" id="invDate">
+</div>
+
+<!-- BROILER -->
+<div class="section">
+  <h3>🐔 Broiler Chicken</h3>
+  <div class="grid">
+    <div>
+      <label>Quantity Bought (KG)</label>
+      <input id="broilerQty">
+    </div>
+    <div>
+      <label>Buy Price ₹ / KG</label>
+      <input id="broilerBuy">
+    </div>
+    <div>
+      <label>Selling Price ₹ / KG (ref)</label>
+      <input id="broilerSell">
+    </div>
+  </div>
+</div>
+
+<!-- COUNTRY -->
+<div class="section">
+  <h3>🐓 Country Chicken</h3>
+  <div class="grid">
+    <div>
+      <label>Quantity Bought (KG)</label>
+      <input id="countryQty">
+    </div>
+    <div>
+      <label>Buy Price ₹ / KG</label>
+      <input id="countryBuy">
+    </div>
+    <div>
+      <label>Selling Price ₹ / KG (ref)</label>
+      <input id="countrySell">
+    </div>
+  </div>
+</div>
+
+<!-- EGGS -->
+<div class="section">
+  <h3>🥚 Eggs</h3>
+  <div class="grid">
+    <div>
+      <label>Quantity Bought (Units)</label>
+      <input id="eggQty">
+    </div>
+    <div>
+      <label>Buy Price ₹ / Unit</label>
+      <input id="eggBuy">
+    </div>
+    <div>
+      <label>Selling Price ₹ / Unit (ref)</label>
+      <input id="eggSell">
+    </div>
+  </div>
+</div>
+
+<!-- WASTAGE -->
+<div class="section">
+  <label>Wastage % (Chicken only)</label>
+  <input id="wastage" value="20" style="max-width:220px">
+</div>
+
+<button onclick="saveInventory()">💾 Save Inventory</button>
+
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "anus-chicken-shop.firebaseapp.com",
+  projectId: "anus-chicken-shop"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const dateInput=document.getElementById("invDate");
+dateInput.value=new Date().toISOString().slice(0,10);
+dateInput.onchange=loadInventory;
+
+window.saveInventory=async()=>{
+  const date=dateInput.value;
+  if(!date){alert("Select date");return;}
+
+  await setDoc(doc(db,"dailyInventory",date),{
+    broilerQty:+broilerQty.value||0,
+    broilerBuy:+broilerBuy.value||0,
+    broilerSell:+broilerSell.value||0,
+
+    countryQty:+countryQty.value||0,
+    countryBuy:+countryBuy.value||0,
+    countrySell:+countrySell.value||0,
+
+    eggQty:+eggQty.value||0,
+    eggBuy:+eggBuy.value||0,
+    eggSell:+eggSell.value||0,
+
+    wastagePercent:+wastage.value||20
+  });
+
+  alert("Inventory saved for " + date);
+};
+
+async function loadInventory(){
+  const date=dateInput.value;
+
+  broilerQty.value=broilerBuy.value=broilerSell.value=
+  countryQty.value=countryBuy.value=countrySell.value=
+  eggQty.value=eggBuy.value=eggSell.value="";
+  wastage.value=20;
+
+  const snap=await getDoc(doc(db,"dailyInventory",date));
+  if(snap.exists()){
+    const d=snap.data();
+    broilerQty.value=d.broilerQty??"";
+    broilerBuy.value=d.broilerBuy??"";
+    broilerSell.value=d.broilerSell??"";
+    countryQty.value=d.countryQty??"";
+    countryBuy.value=d.countryBuy??"";
+    countrySell.value=d.countrySell??"";
+    eggQty.value=d.eggQty??"";
+    eggBuy.value=d.eggBuy??"";
+    eggSell.value=d.eggSell??"";
+    wastage.value=d.wastagePercent??20;
+  }
+}
+loadInventory();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summary – Anu’s Chicken Shop</title>
+
+<style>
+body{margin:0;padding:16px;font-family:system-ui;background:#f1f5f9}
+.header{
+  background:#22c55e;color:white;
+  padding:18px;font-size:26px;font-weight:900;
+  text-align:center;border-radius:18px
+}
+.tabs{
+  display:flex;gap:10px;margin:16px auto;max-width:900px
+}
+.tabs button{
+  flex:1;padding:14px;font-size:18px;font-weight:800;
+  border:none;border-radius:14px;background:#e5e7eb
+}
+.tabs button.active{background:#0ea5e9;color:white}
+
+.controls{
+  max-width:900px;margin:auto;
+  display:none;gap:10px
+}
+.controls input,.controls button{
+  padding:14px;font-size:18px;border-radius:14px;border:none
+}
+.controls button{background:#0ea5e9;color:white;font-weight:800}
+
+.grid{
+  max-width:1000px;margin:20px auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:18px
+}
+.card{
+  background:white;padding:18px;border-radius:18px;
+  box-shadow:0 6px 14px rgba(0,0,0,.08)
+}
+.full{grid-column:span 2}
+h3{margin:0 0 10px 0}
+.line{font-size:17px;margin:6px 0}
+.bold{font-weight:900}
+
+@media(max-width:800px){
+  .grid{grid-template-columns:1fr}
+  .full{grid-column:span 1}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">📊 Summary</div>
+
+<div class="tabs">
+  <button id="liveTab" class="active">LIVE</button>
+  <button id="dayTab">DATE</button>
+  <button id="rangeTab">RANGE</button>
+</div>
+
+<div class="controls" id="controls">
+  <input type="date" id="fromDate">
+  <input type="date" id="toDate">
+  <button onclick="loadRange()">Load</button>
+</div>
+
+<div class="grid">
+
+<!-- SALES -->
+<div class="card">
+<h3>Sales</h3>
+<div class="line">Total ₹ <span id="sales">0</span></div>
+<div class="line">Broiler Sold <span id="bSold">0</span> kg</div>
+<div class="line">Country Sold <span id="cSold">0</span> kg</div>
+<div class="line">Eggs Sold <span id="eSold">0</span></div>
+</div>
+
+<!-- STOCK LEFT -->
+<div class="card">
+<h3>Stock Left</h3>
+
+<div class="line bold">Broiler</div>
+<div class="line">Live <span id="bLive">0</span> kg</div>
+<div class="line">After Waste <span id="bAfter">0</span> kg</div>
+
+<br>
+
+<div class="line bold">Country</div>
+<div class="line">Live <span id="cLive">0</span> kg</div>
+<div class="line">After Waste <span id="cAfter">0</span> kg</div>
+
+<br>
+
+<div class="line bold">Eggs</div>
+<div class="line">Remaining <span id="eLeft">0</span> units</div>
+</div>
+
+<!-- PROFIT -->
+<div class="card full">
+<h3>Profit</h3>
+<div class="line">Expected Profit ₹ <span id="expectedProfit">0</span></div>
+<div class="line">Actual Profit ₹ <span id="actualProfit">0</span></div>
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs, onSnapshot } 
+from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"YOUR_API_KEY",
+  authDomain:"anus-chicken-shop.firebaseapp.com",
+  projectId:"anus-chicken-shop"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const today=new Date().toISOString().slice(0,10);
+let unsubscribe=null;
+
+/* ---------- TAB HANDLING ---------- */
+liveTab.onclick=()=>activateLive();
+dayTab.onclick=()=>activateDate();
+rangeTab.onclick=()=>activateRange();
+
+function activateLive(){
+  setTab(liveTab);
+  controls.style.display="none";
+  if(unsubscribe) unsubscribe();
+  unsubscribe = onSnapshot(
+    query(collection(db,"sales"),where("date","==",today)),
+    ()=>loadSummary(today,today)
+  );
+}
+
+function activateDate(){
+  setTab(dayTab);
+  controls.style.display="flex";
+  fromDate.value=toDate.value=today;
+}
+
+function activateRange(){
+  setTab(rangeTab);
+  controls.style.display="flex";
+  fromDate.value=toDate.value="";
+}
+
+function setTab(btn){
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+/* ---------- LOAD RANGE ---------- */
+window.loadRange=()=>{
+  if(unsubscribe) unsubscribe();
+  loadSummary(fromDate.value,toDate.value);
+}
+
+/* ---------- CORE SUMMARY ---------- */
+async function loadSummary(from,to){
+  if(!from||!to)return;
+
+  // INVENTORY
+  let invTotal={
+    bQty:0,bBuy:0,bSell:0,bWaste:20,
+    cQty:0,cBuy:0,cSell:0,cWaste:20,
+    eQty:0,eBuy:0,eSell:0
+  };
+
+  const invSnap = await getDocs(collection(db,"dailyInventory"));
+  invSnap.forEach(d=>{
+    if(d.id>=from && d.id<=to){
+      const v=d.data();
+      invTotal.bQty+=v.broilerQty||0;
+      invTotal.cQty+=v.countryQty||0;
+      invTotal.eQty+=v.eggQty||0;
+
+      invTotal.bBuy=v.broilerBuy||invTotal.bBuy;
+      invTotal.cBuy=v.countryBuy||invTotal.cBuy;
+      invTotal.eBuy=v.eggBuy||invTotal.eBuy;
+
+      invTotal.bSell=v.broilerSell||invTotal.bSell;
+      invTotal.cSell=v.countrySell||invTotal.cSell;
+      invTotal.eSell=v.eggSell||invTotal.eSell;
+
+      invTotal.bWaste=v.broilerWaste||20;
+      invTotal.cWaste=v.countryWaste||20;
+    }
+  });
+
+  // SALES
+  let sales=0,bSold=0,cSold=0,eSold=0,actualProfit=0;
+  const salesSnap=await getDocs(
+    query(collection(db,"sales"),
+      where("date",">=",from),
+      where("date","<=",to))
+  );
+
+  salesSnap.forEach(d=>{
+    const s=d.data();
+    sales+=s.total||0;
+    bSold+=s.broilerKg||0;
+    cSold+=s.countryKg||0;
+    eSold+=s.eggs||0;
+
+    const cost=
+      (s.broilerKg||0)*invTotal.bBuy+
+      (s.countryKg||0)*invTotal.cBuy+
+      (s.eggs||0)*invTotal.eBuy;
+
+    actualProfit+=(s.total||0)-cost;
+  });
+
+  const bAfter=invTotal.bQty*(1-invTotal.bWaste/100);
+  const cAfter=invTotal.cQty*(1-invTotal.cWaste/100);
+
+  const expectedProfit=
+    bAfter*invTotal.bSell+
+    cAfter*invTotal.cSell+
+    invTotal.eQty*invTotal.eSell
+    -
+    (
+      invTotal.bQty*invTotal.bBuy+
+      invTotal.cQty*invTotal.cBuy+
+      invTotal.eQty*invTotal.eBuy
+    );
+
+  // UI
+  set("sales",sales.toFixed(0));
+  set("bSold",bSold.toFixed(2));
+  set("cSold",cSold.toFixed(2));
+  set("eSold",eSold);
+
+  set("bLive",(invTotal.bQty-bSold).toFixed(2));
+  set("bAfter",(bAfter-bSold).toFixed(2));
+  set("cLive",(invTotal.cQty-cSold).toFixed(2));
+  set("cAfter",(cAfter-cSold).toFixed(2));
+  set("eLeft",(invTotal.eQty-eSold));
+
+  set("expectedProfit",expectedProfit.toFixed(0));
+  set("actualProfit",actualProfit.toFixed(0));
+}
+
+function set(id,val){
+  document.getElementById(id).innerText=val;
+}
+
+activateLive();
+</script>
+
+</body>
+</html>
