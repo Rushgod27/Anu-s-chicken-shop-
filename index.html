@@ -4,226 +4,150 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>Anu’s Chicken Shop – POS</title>
 
 <style>
-html, body {
-  touch-action: manipulation;
-  -webkit-user-select: none;
-  user-select: none;
+html,body{
+  touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
 }
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-  font-family: system-ui;
-  background: linear-gradient(135deg,#fdf6f0,#eef2ff);
-  padding: 20px;
-  margin: 0;
-}
-
-/* ================= HEADER ================= */
-.header {
-  text-align: center;
-  background: linear-gradient(135deg,#fde68a,#fbbf24);
-  padding: 18px;
-  border-radius: 24px;
-  font-size: 34px;
-  font-weight: 900;
-  color: #1f2933;
-  letter-spacing: 1px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+body{
+  font-family:system-ui;
+  background:linear-gradient(135deg,#fdf6f0,#eef2ff);
+  padding:20px;margin:0;
 }
 
-/* ================= APP ================= */
-.app {
-  max-width: 1400px;
-  margin: auto;
-  display: grid;
-  gap: 20px;
+.header{
+  text-align:center;
+  background:linear-gradient(135deg,#fde68a,#fbbf24);
+  padding:20px;
+  font-size:36px;
+  font-weight:900;
+  border-radius:26px;
+  margin-bottom:20px;
 }
 
-/* ================= PRICES ================= */
-.prices {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 16px;
-  padding: 20px;
-  border-radius: 22px;
-  background: linear-gradient(135deg,#c7d2fe,#e0e7ff);
+.app{max-width:1400px;margin:auto;display:grid;gap:20px}
+
+/* PRICES */
+.prices{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  padding:20px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#c7d2fe,#e0e7ff);
+}
+.price-box label{font-size:20px;font-weight:800}
+.price-box input{
+  width:100%;
+  padding:18px;
+  font-size:22px;
+  border-radius:18px;
+  border:3px solid transparent;
+}
+.price-box input.active{border-color:#6366f1}
+
+/* MAIN */
+.main{display:grid;grid-template-columns:2.2fr 1.4fr;gap:20px}
+
+/* BILLING */
+.billing{
+  background:linear-gradient(135deg,#fff7ed,#ffedd5);
+  padding:20px;border-radius:26px;
+}
+.billing h3{text-align:center;font-size:32px}
+
+/* ICONS */
+.icon-group{display:flex;gap:16px;margin:12px 0}
+.icon-btn{
+  flex:1;padding:22px 0;font-size:22px;
+  font-weight:800;border:none;border-radius:22px;
+  background:#f1f5f9;
+}
+.icon-btn.active{background:linear-gradient(135deg,#fde68a,#fbbf24)}
+
+/* INPUTS */
+.field{margin-bottom:14px}
+.field label{font-size:20px;font-weight:800}
+.field input{
+  width:100%;padding:18px;font-size:22px;
+  border-radius:18px;border:3px solid transparent;
+}
+.field input.active{border-color:#6366f1}
+
+/* RETURN */
+.return-box{
+  background:#dcfce7;
+  border-radius:18px;
+  padding:18px;
+  font-size:26px;
+  font-weight:900;
+  text-align:center;
 }
 
-.price-box label {
-  font-size: 20px;
-  font-weight: 800;
+/* NEXT */
+.next{
+  width:100%;padding:20px;font-size:22px;
+  font-weight:900;border:none;border-radius:22px;
+  background:#4f46e5;color:white;
+  margin-top:14px;
 }
 
-.price-box input {
-  width: 100%;
-  padding: 18px;
-  font-size: 22px;
-  border-radius: 18px;
-  border: 3px solid transparent;
+/* TOTALS */
+.totals{
+  background:linear-gradient(135deg,#ecfeff,#cffafe);
+  padding:18px;border-radius:26px;
 }
-
-/* ================= MAIN ================= */
-.main {
-  display: grid;
-  grid-template-columns: 2.2fr 1.4fr;
-  gap: 20px;
+.total-box{
+  background:white;border-radius:18px;
+  padding:18px;font-size:20px;
+  font-weight:800;margin-bottom:12px;text-align:center;
 }
+.total-box span{font-size:30px}
 
-/* ================= BILLING ================= */
-.billing {
-  background: linear-gradient(135deg,#fff7ed,#ffedd5);
-  padding: 20px;
-  border-radius: 26px;
+/* KEYPAD */
+.keypad{
+  margin-top:16px;background:#020617;
+  border-radius:24px;padding:16px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:14px;border:3px solid transparent;
 }
-
-.billing h3 {
-  text-align: center;
-  font-size: 32px;
-  margin-bottom: 10px;
+.keypad.active{
+  border-color:#6366f1;
+  box-shadow:0 0 0 5px rgba(99,102,241,.4);
 }
-
-/* ICON BUTTONS */
-.icon-group {
-  display: flex;
-  gap: 16px;
-  margin: 12px 0;
+.keypad button{
+  padding:28px;font-size:30px;
+  font-weight:900;border:none;
+  border-radius:20px;background:#374151;color:white;
 }
-
-.icon-btn {
-  flex: 1;
-  padding: 22px 0;
-  font-size: 22px;
-  font-weight: 800;
-  border-radius: 22px;
-  border: none;
-  background: #f1f5f9;
-}
-
-.icon-btn.active {
-  background: linear-gradient(135deg,#fde68a,#fbbf24);
-}
-
-/* INPUT FIELDS */
-.field {
-  margin-bottom: 14px;
-}
-
-.field label {
-  font-size: 20px;
-  font-weight: 800;
-}
-
-.field input {
-  width: 100%;
-  padding: 18px;
-  font-size: 22px;
-  border-radius: 18px;
-  border: 3px solid transparent;
-}
-
-/* RETURN BOX */
-.return-box {
-  background: #dcfce7;
-  border-radius: 18px;
-  padding: 18px;
-  font-size: 26px;
-  font-weight: 900;
-  text-align: center;
-  margin-top: 10px;
-}
-
-/* NEXT BUTTON */
-.next {
-  width: 100%;
-  padding: 20px;
-  font-size: 22px;
-  font-weight: 900;
-  border-radius: 22px;
-  border: none;
-  background: #4f46e5;
-  color: white;
-  margin-top: 14px;
-}
-
-/* ================= TOTALS ================= */
-.totals {
-  background: linear-gradient(135deg,#ecfeff,#cffafe);
-  padding: 18px;
-  border-radius: 26px;
-}
-
-.total-box {
-  background: white;
-  border-radius: 18px;
-  padding: 18px;
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-.total-box span {
-  font-size: 30px;
-}
-
-/* ================= KEYPAD ================= */
-.keypad {
-  margin-top: 16px;
-  background: #020617;
-  border-radius: 24px;
-  padding: 16px;
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 14px;
-  border: 3px solid transparent;
-}
-
-.keypad.active {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 5px rgba(99,102,241,0.4);
-}
-
-.keypad button {
-  padding: 28px;
-  font-size: 30px;
-  font-weight: 900;
-  border-radius: 20px;
-  border: none;
-  background: #374151;
-  color: white;
-}
-
-.keypad .del { background: #ef4444; }
-.keypad .clr { background: #4f46e5; }
+.keypad .del{background:#ef4444}
+.keypad .clr{background:#4f46e5}
 
 @media(max-width:900px){
-  .main { grid-template-columns: 1fr; }
-  .prices { grid-template-columns: 1fr; }
+  .main{grid-template-columns:1fr}
+  .prices{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 HEADER -->
-<div class="header">
-🐔 Anu’s Chicken Shop
-</div>
+<div class="header">🐔 Anu’s Chicken Shop</div>
 
 <div class="app">
 
-<!-- PRICES -->
 <div class="prices">
   <div class="price-box">
-    <label>🐔 Broiler ₹ / Kg</label>
+    <label>🐔 Broiler ₹/Kg</label>
     <input id="broilerPrice" readonly>
   </div>
   <div class="price-box">
-    <label>🐓 Country ₹ / Kg</label>
+    <label>🐓 Country ₹/Kg</label>
     <input id="countryPrice" readonly>
   </div>
   <div class="price-box">
@@ -234,7 +158,6 @@ body {
 
 <div class="main">
 
-<!-- BILLING -->
 <div class="billing">
 <h3>🧾 Billing</h3>
 
@@ -275,7 +198,6 @@ body {
 <button class="next" onclick="nextCustomer()">🧾 NEXT CUSTOMER</button>
 </div>
 
-<!-- TOTALS + KEYPAD -->
 <div class="totals">
   <div class="total-box">🐔 Chicken ₹ <span id="chickenTotal">0.00</span></div>
   <div class="total-box">🥚 Egg ₹ <span id="eggTotal">0.00</span></div>
@@ -302,9 +224,125 @@ body {
 </div>
 </div>
 
-<!-- JS stays SAME as before -->
 <script>
-/* (JS logic unchanged – prices safe, keypad safe, billing safe) */
+/* ========= DAILY SALES ========= */
+function dateKey(){
+  const d=new Date();
+  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+}
+if(localStorage.getItem("salesDate")!==dateKey()){
+  localStorage.setItem("salesDate",dateKey());
+  localStorage.setItem("dailySales","0");
+}
+let dailySales=Number(localStorage.getItem("dailySales"))||0;
+dailyTotal.innerText=dailySales.toFixed(2);
+
+/* ========= PRICES ========= */
+function savePrices(){
+  localStorage.setItem("shopPrices",JSON.stringify({
+    broiler:broilerPrice.value,
+    country:countryPrice.value,
+    egg:eggPrice.value
+  }));
+}
+function loadPrices(){
+  const p=JSON.parse(localStorage.getItem("shopPrices")||"{}");
+  if(p.broiler!==undefined) broilerPrice.value=p.broiler;
+  if(p.country!==undefined) countryPrice.value=p.country;
+  if(p.egg!==undefined) eggPrice.value=p.egg;
+}
+loadPrices();
+
+/* ========= ACTIVE INPUT ========= */
+let active=null;
+const keypad=document.getElementById("keypad");
+document.querySelectorAll("input").forEach(i=>{
+  i.onclick=()=>{
+    document.querySelectorAll("input").forEach(x=>x.classList.remove("active"));
+    i.classList.add("active");
+    active=i;
+    keypad.classList.add("active");
+  };
+});
+
+/* ========= KEYPAD ========= */
+function press(v){
+  if(!active) return;
+  active.value+=v;
+  savePrices();
+  calc();
+}
+function backspace(){
+  if(!active) return;
+  active.value=active.value.slice(0,-1);
+  savePrices();
+  calc();
+}
+function clearField(){
+  if(!active) return;
+  active.value="";
+  savePrices();
+  calc();
+}
+
+/* ========= BILLING ========= */
+let chicken=null, mode=null;
+function selectChicken(btn,t){
+  chicken=t;
+  document.getElementById("broilerBtn").classList.remove("active");
+  document.getElementById("countryBtn").classList.remove("active");
+  btn.classList.add("active");
+  calc();
+}
+function setMode(btn,m){
+  mode=m;
+  document.getElementById("kgBtn").classList.remove("active");
+  document.getElementById("rsBtn").classList.remove("active");
+  btn.classList.add("active");
+  kgBlock.style.display=m==="kg"?"block":"none";
+  amountBlock.style.display=m==="rs"?"block":"none";
+  calc();
+}
+
+/* ========= CALC ========= */
+function calc(){
+  const egg=(Number(eggQty.value)||0)*(Number(eggPrice.value)||0);
+  let chickenAmt=0;
+  if(chicken&&mode){
+    const rate=chicken==="broiler"
+      ?Number(broilerPrice.value||0)
+      :Number(countryPrice.value||0);
+    chickenAmt=mode==="kg"
+      ?(Number(kgInput.value)||0)*rate
+      :Number(amountInput.value)||0;
+  }
+  const total=egg+chickenAmt;
+  chickenTotal.innerText=chickenAmt.toFixed(2);
+  eggTotal.innerText=egg.toFixed(2);
+  grandTotal.innerText=total.toFixed(2);
+  returnAmt.innerText=((Number(amountReceived.value)||0)-total).toFixed(2);
+}
+
+/* ========= NEXT ========= */
+function nextCustomer(){
+  const bill=Number(grandTotal.innerText)||0;
+  if(bill>0){
+    dailySales+=bill;
+    localStorage.setItem("dailySales",dailySales);
+    dailyTotal.innerText=dailySales.toFixed(2);
+  }
+  kgInput.value="";
+  amountInput.value="";
+  eggQty.value="";
+  amountReceived.value="";
+  returnAmt.innerText="0.00";
+  chickenTotal.innerText="0.00";
+  eggTotal.innerText="0.00";
+  grandTotal.innerText="0.00";
+  chicken=null;
+  mode=null;
+  document.querySelectorAll(".icon-btn").forEach(b=>b.classList.remove("active"));
+}
 </script>
 
 </body>
