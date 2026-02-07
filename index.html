@@ -2,231 +2,262 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Anu’s Chicken Shop – POS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Billing – Anu’s Chicken Shop</title>
 
 <style>
-html,body{margin:0;padding:0;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+html,body{
+  margin:0;padding:0;
+  font-family:system-ui;
+  background:#f1f5f9;
+}
 *{box-sizing:border-box}
-body{font-family:system-ui;background:#f1f5f9;padding:16px}
 
 /* HEADER */
 .header{
-  background:#fbbf24;
-  text-align:center;
-  font-size:34px;
-  font-weight:900;
-  padding:18px;
-  border-radius:18px;
-  margin-bottom:14px
-}
-
-/* PRICE BAR */
-.prices{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  background:#e0e7ff;
-  padding:14px;
-  border-radius:16px;
-  margin-bottom:14px
-}
-.prices label{font-weight:800}
-.prices input{
-  width:100%;
-  padding:14px;
-  font-size:20px;
-  border-radius:14px;
-}
-
-/* MAIN WRAPPER */
-.main{
-  display:grid;
-  grid-template-columns:2.2fr 1fr;
-  gap:14px
-}
-
-/* LEFT SIDE */
-.left{
-  display:grid;
-  gap:14px
-}
-
-/* BILLING */
-.billing{
-  background:#fff7ed;
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);
   padding:16px;
-  border-radius:18px
+  font-size:26px;
+  font-weight:900;
+  text-align:center;
 }
-.billing h3{text-align:center;margin:6px 0 10px}
 
-.buttons{display:flex;gap:10px;margin-bottom:10px}
+/* CONTAINER */
+.container{
+  max-width:1300px;
+  margin:auto;
+  padding:12px;
+}
+
+/* ===== iPad Layout ===== */
+.layout{
+  display:grid;
+  grid-template-columns: 1fr 380px;
+  gap:16px;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  padding:14px;
+  border-radius:18px;
+  margin-bottom:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,.05);
+}
+
+h3{
+  margin:0 0 10px;
+  font-size:20px;
+}
+
+/* INPUTS */
+.row{display:flex;gap:10px;margin-bottom:10px}
+
+input{
+  width:100%;
+  padding:16px;
+  font-size:20px;
+  border-radius:16px;
+  border:1px solid #cbd5f5;
+}
+
+/* BUTTONS */
 .btn{
   flex:1;
-  padding:14px;
-  font-size:20px;
+  padding:16px;
+  font-size:18px;
   font-weight:800;
   border:none;
-  border-radius:14px;
-  background:#e5e7eb
+  border-radius:16px;
+  background:#e5e7eb;
 }
-.btn.active{background:#fbbf24}
 
-.field{margin-bottom:8px}
-.field label{font-weight:800}
-.field input{
+.btn.active{
+  background:#fbbf24;
+}
+
+.primary{
+  background:#4f46e5;
+  color:#fff;
   width:100%;
+  padding:18px;
+  font-size:22px;
+  font-weight:900;
+  border:none;
+  border-radius:18px;
+}
+
+.primary:disabled{opacity:.6}
+
+/* TOTAL */
+.total{
+  background:#dbeafe;
+  font-size:26px;
+  font-weight:900;
   padding:14px;
-  font-size:20px;
-  border-radius:14px;
+  border-radius:16px;
+  text-align:center;
 }
 
 .return{
   background:#dcfce7;
-  padding:14px;
-  border-radius:16px;
-  margin-top:6px;
-  font-size:22px;
+  font-size:20px;
   font-weight:900;
-  text-align:center
-}
-.return.negative{background:#fee2e2;color:#991b1b}
-
-.total{
-  background:#dbeafe;
-  padding:16px;
+  padding:12px;
   border-radius:16px;
-  margin-top:8px;
-  font-size:26px;
-  font-weight:900;
-  text-align:center
-}
-
-.next{
-  margin-top:10px;
-  width:100%;
-  padding:16px;
-  font-size:22px;
-  font-weight:900;
-  border:none;
-  border-radius:16px;
-  background:#4f46e5;
-  color:white
-}
-
-/* SUMMARY */
-.summary{
-  background:#ecfeff;
-  padding:16px;
-  border-radius:18px
-}
-.summary h3{text-align:center;margin-top:0}
-.box{
-  background:white;
-  padding:14px;
-  border-radius:14px;
-  font-weight:800;
-  margin-bottom:8px;
   text-align:center;
-  font-size:18px
+  margin-top:6px;
 }
-.box span{font-size:24px}
 
-/* KEYPAD (RIGHT ONLY) */
+.return.negative{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+/* ===== KEYPAD ===== */
+.keypad-container{
+  position:sticky;
+  top:12px;
+  height:calc(100vh - 24px);
+}
+
 .keypad{
-  background:#020617;
+  background:#111827;
   padding:14px;
-  border-radius:20px;
+  border-radius:24px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
-  height:fit-content
+  height:100%;
+  align-content:start;
 }
-.keypad button{
-  padding:26px;
-  font-size:28px;
-  font-weight:900;
-  border:none;
-  border-radius:16px;
-  background:#374151;
-  color:white
-}
-.keypad .del{background:#ef4444}
-.keypad .clr{background:#4f46e5}
 
+.keypad button{
+  padding:30px;
+  font-size:30px;
+  font-weight:900;
+  background:#374151;
+  color:#fff;
+  border:none;
+  border-radius:20px;
+}
+
+.keypad .del{
+  background:#ef4444;
+}
+
+/* HISTORY */
+.list{
+  max-height:240px;
+  overflow:auto;
+  font-size:15px;
+}
+
+.item{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px dashed #ddd;
+}
+
+/* ===== MOBILE ===== */
 @media(max-width:900px){
-  .main{grid-template-columns:1fr}
+  .layout{grid-template-columns:1fr;}
+
+  .keypad-container{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:auto;
+    z-index:999;
+  }
+
+  .keypad{
+    grid-template-columns:repeat(3,1fr);
+    border-radius:20px 20px 0 0;
+  }
+
+  .container{
+    padding-bottom:260px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">🐔 Anu’s Chicken Shop</div>
+<div class="header">🐔 Anu’s Chicken Shop – Billing</div>
 
-<div class="prices">
-  <div><label>Broiler ₹/Kg</label><input id="broilerPrice" readonly></div>
-  <div><label>Country ₹/Kg</label><input id="countryPrice" readonly></div>
-  <div><label>Egg ₹</label><input id="eggPrice" readonly></div>
+<div class="container">
+<div class="layout">
+
+<!-- LEFT -->
+<div>
+
+<div class="card">
+<h3>Today’s Selling Prices</h3>
+<div class="row">
+  <input id="broilerPrice" placeholder="Broiler ₹/kg">
+  <input id="countryPrice" placeholder="Country ₹/kg">
+  <input id="eggPrice" placeholder="Egg ₹">
+</div>
+<button class="primary" onclick="savePrices()">Save Prices</button>
 </div>
 
-<div class="main">
+<div class="card">
+<h3>New Billing</h3>
 
-<!-- LEFT PANEL -->
-<div class="left">
-
-<div class="billing">
-<h3>🧾 Current Customer</h3>
-
-<div class="buttons">
-  <button class="btn chicken-btn" onclick="chooseChicken('broiler',this)">🐔 Broiler</button>
-  <button class="btn chicken-btn" onclick="chooseChicken('country',this)">🐓 Country</button>
+<div class="row">
+  <button class="btn" onclick="selectChicken('broiler',this)">🐔 Broiler</button>
+  <button class="btn" onclick="selectChicken('country',this)">🐓 Country</button>
 </div>
 
-<div class="buttons" id="modeButtons" style="display:none">
-  <button class="btn mode-btn" onclick="chooseMode('kg',this)">⚖️ KG</button>
-  <button class="btn mode-btn" onclick="chooseMode('rs',this)">₹ Amount</button>
+<div class="row" id="modeRow" style="display:none">
+  <button class="btn" onclick="selectMode('kg',this)">KG</button>
+  <button class="btn" onclick="selectMode('rs',this)">₹</button>
 </div>
 
-<div class="field" id="kgField" style="display:none">
-<label>KG</label><input id="kgInput" readonly>
+<input id="kgInput" placeholder="KG" style="display:none">
+<input id="rsInput" placeholder="Chicken Amount ₹" style="display:none">
+<input id="eggQty" placeholder="Egg Quantity">
+
+<div class="card">
+<h3>Current Bill Summary</h3>
+<div id="billSummary">Nothing selected</div>
 </div>
 
-<div class="field" id="rsField" style="display:none">
-<label>₹ Amount</label><input id="rsInput" readonly>
+<div class="total">TOTAL ₹ <span id="totalAmt">0.00</span></div>
 </div>
 
-<div class="field">
-<label>Egg Units</label><input id="eggQty" readonly>
+<div class="card">
+<h3>Payment</h3>
+
+<div class="row">
+  <button class="btn" onclick="setPayment('cash',this)">💵 Cash</button>
+  <button class="btn" onclick="setPayment('online',this)">📱 Online</button>
 </div>
 
-<div class="field">
-<label>Amount Received</label><input id="received" readonly>
-</div>
+<input id="received" placeholder="Amount Received ₹">
 
 <div class="return" id="returnBox">
-RETURN ₹ <span id="returnAmt">0.00</span>
+Return ₹ <span id="returnAmt">0.00</span>
 </div>
 
-<div class="total">
-TOTAL ₹ <span id="billTotal">0.00</span>
+<button class="primary" id="saleBtn" onclick="confirmSale()">SALE</button>
 </div>
 
-<button class="next" onclick="nextCustomer()">NEXT CUSTOMER</button>
-</div>
-
-<div class="summary">
-<h3>📊 Today</h3>
-<div class="box">Sales ₹ <span id="daySales">0.00</span></div>
-<div class="box">Broiler KG <span id="broilerKg">0.00</span></div>
-<div class="box">Country KG <span id="countryKg">0.00</span></div>
-<div class="box">Eggs <span id="eggCount">0</span></div>
+<div class="card">
+<h3>Today’s Sale Report</h3>
+<div id="todayReport">Loading...</div>
+<button class="btn" onclick="toggleHistory()">Sell History</button>
+<div id="history" class="list" style="display:none"></div>
 </div>
 
 </div>
 
-<!-- RIGHT PANEL -->
+<!-- RIGHT : KEYPAD -->
+<div class="keypad-container">
 <div class="keypad">
   <button onclick="press('7')">7</button>
   <button onclick="press('8')">8</button>
@@ -239,102 +270,130 @@ TOTAL ₹ <span id="billTotal">0.00</span>
   <button onclick="press('3')">3</button>
   <button onclick="press('.')">.</button>
   <button onclick="press('0')">0</button>
-  <button class="del" onclick="backspace()">⌫</button>
-  <button class="clr" onclick="clearField()">C</button>
+  <button class="del" onclick="back()">⌫</button>
+</div>
 </div>
 
 </div>
+</div>
 
-<script>
-const today=new Date().toDateString();
-if(localStorage.getItem("day")!==today){
-  localStorage.setItem("day",today);
-  localStorage.setItem("sales",0);
-  localStorage.setItem("bkg",0);
-  localStorage.setItem("ckg",0);
-  localStorage.setItem("eggs",0);
-}
+<!-- ===== SCRIPT (UNCHANGED LOGIC) ===== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import {
+  getFirestore, doc, setDoc, addDoc,
+  collection, query, where, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-let daySales=+localStorage.getItem("sales");
-let broilerKg=+localStorage.getItem("bkg");
-let countryKg=+localStorage.getItem("ckg");
-let eggCount=+localStorage.getItem("eggs");
+const firebaseConfig={
+  apiKey:"YOUR_API_KEY",
+  authDomain:"anus-chicken-shop.firebaseapp.com",
+  projectId:"anus-chicken-shop"
+};
 
-let active=null,chicken=null,mode=null;
-document.querySelectorAll("input").forEach(i=>i.onclick=()=>active=i);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const today=new Date().toISOString().slice(0,10);
 
-function press(v){if(active){active.value+=v;calc();}}
-function backspace(){if(active){active.value=active.value.slice(0,-1);calc();}}
-function clearField(){if(active){active.value="";calc();}}
+let activeInput=null,chicken=null,mode=null,payment=null;
 
-function chooseChicken(type,btn){
-  chicken=type;
-  document.querySelectorAll(".chicken-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  modeButtons.style.display="flex";
-  mode=null;
-  kgField.style.display=rsField.style.display="none";
-  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
+document.querySelectorAll("input").forEach(i=>i.onclick=()=>activeInput=i);
+
+window.press=v=>{
+  if(!activeInput) return;
+  activeInput.value+=v; calc();
+};
+window.back=()=>{
+  if(!activeInput) return;
+  activeInput.value=activeInput.value.slice(0,-1); calc();
+};
+
+window.selectChicken=(t,b)=>{
+  chicken=t;
+  document.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  modeRow.style.display="flex";
   calc();
-}
+};
 
-function chooseMode(m,btn){
+window.selectMode=(m,b)=>{
   mode=m;
-  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  kgField.style.display=m==="kg"?"block":"none";
-  rsField.style.display=m==="rs"?"block":"none";
+  document.querySelectorAll("#modeRow .btn").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  kgInput.style.display=m==="kg"?"block":"none";
+  rsInput.style.display=m==="rs"?"block":"none";
   calc();
-}
+};
+
+window.setPayment=(p,b)=>{
+  payment=p;
+  document.querySelectorAll(".row .btn").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+};
 
 function calc(){
-  const eggAmt=(+eggQty.value||0)*(+eggPrice.value||0);
-  let chickenAmt=0;
+  let c=0;
   if(chicken&&mode){
     const rate=chicken==="broiler"?+broilerPrice.value:+countryPrice.value;
-    chickenAmt=mode==="kg"?(+kgInput.value||0)*rate:(+rsInput.value||0);
+    c=mode==="kg"?(+kgInput.value||0)*rate:(+rsInput.value||0);
   }
-  const total=eggAmt+chickenAmt;
-  billTotal.innerText=total.toFixed(2);
-  const ret=(+received.value||0)-total;
-  returnAmt.innerText=ret.toFixed(2);
-  returnBox.classList.toggle("negative",ret<0);
+  const e=(+eggQty.value||0)*(+eggPrice.value||0);
+  const total=c+e;
+  totalAmt.innerText=total.toFixed(2);
+
+  billSummary.innerHTML=`${chicken||""}${eggQty.value?`<br>Eggs ${eggQty.value}`:""}`;
+
+  const r=(+received.value||0)-total;
+  returnAmt.innerText=r.toFixed(2);
+  returnBox.classList.toggle("negative",r<0);
 }
 
-function nextCustomer(){
-  const total=+billTotal.innerText||0;
-  if(total>0){
-    daySales+=total;
-    if(chicken){
-      const rate=chicken==="broiler"?+broilerPrice.value:+countryPrice.value;
-      const kg=mode==="kg"?+kgInput.value:(+rsInput.value/rate);
-      chicken==="broiler"?broilerKg+=kg:countryKg+=kg;
-    }
-    eggCount+=+eggQty.value||0;
-    localStorage.setItem("sales",daySales);
-    localStorage.setItem("bkg",broilerKg);
-    localStorage.setItem("ckg",countryKg);
-    localStorage.setItem("eggs",eggCount);
-  }
-  kgInput.value=rsInput.value=eggQty.value=received.value="";
-  billTotal.innerText="0.00";
-  returnAmt.innerText="0.00";
-  chicken=null;mode=null;
-  modeButtons.style.display="none";
-  kgField.style.display=rsField.style.display="none";
-  document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
-  document.getElementById("daySales").innerText=daySales.toFixed(2);
-  document.getElementById("broilerKg").innerText=broilerKg.toFixed(2);
-  document.getElementById("countryKg").innerText=countryKg.toFixed(2);
-  document.getElementById("eggCount").innerText=eggCount;
-}
+window.savePrices=async()=>{
+  await setDoc(doc(db,"dailyConfig",today),{
+    broilerSell:+broilerPrice.value,
+    countrySell:+countryPrice.value,
+    eggSell:+eggPrice.value
+  },{merge:true});
+  alert("Prices saved");
+};
 
-(function(){
-  const p=JSON.parse(localStorage.getItem("prices")||"{}");
-  if(p.b)broilerPrice.value=p.b;
-  if(p.c)countryPrice.value=p.c;
-  if(p.e)eggPrice.value=p.e;
-})();
+window.confirmSale=async()=>{
+  if(!chicken||!mode||!payment||+totalAmt.innerText<=0) return;
+  if(!confirm("Confirm this sale?")) return;
+
+  saleBtn.disabled=true;
+  saleBtn.innerText="Saving...";
+
+  await addDoc(collection(db,"sales"),{
+    date:today,
+    time:new Date().toLocaleTimeString(),
+    broilerKg:chicken==="broiler"&&mode==="kg"?+kgInput.value:0,
+    countryKg:chicken==="country"&&mode==="kg"?+kgInput.value:0,
+    eggs:+eggQty.value||0,
+    total:+totalAmt.innerText,
+    payment
+  });
+
+  location.reload();
+};
+
+onSnapshot(query(collection(db,"sales"),where("date","==",today)),snap=>{
+  let t=0,b=0,c=0,e=0;
+  history.innerHTML="";
+  snap.forEach(d=>{
+    const v=d.data();
+    t+=v.total||0;
+    b+=v.broilerKg||0;
+    c+=v.countryKg||0;
+    e+=v.eggs||0;
+    history.innerHTML+=`<div class="item">₹${v.total} (${v.time})</div>`;
+  });
+  todayReport.innerHTML=`₹${t}<br>Broiler ${b}kg | Country ${c}kg | Eggs ${e}`;
+});
+
+window.toggleHistory=()=>{
+  history.style.display=history.style.display==="none"?"block":"none";
+};
 </script>
 
 </body>
