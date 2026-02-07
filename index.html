@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Chicken Shop POS</title>
 
 <style>
@@ -12,146 +13,190 @@ html, body {
   -webkit-user-select: none;
   user-select: none;
 }
-*{ box-sizing:border-box; }
 
-body{
+* { box-sizing: border-box; }
+
+body {
   font-family: system-ui;
   background: linear-gradient(135deg,#fdf6f0,#eef2ff);
-  padding:16px;
-  margin:0;
+  padding: 20px;
+  margin: 0;
 }
 
-.app{ max-width:1200px; margin:auto; display:grid; gap:16px }
-
-/* PRICE BAR */
-.prices{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  padding:14px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#c7d2fe,#e0e7ff);
-}
-.price-box label{ font-weight:700 }
-.price-box input{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:2px solid transparent;
+.app {
+  max-width: 1400px;
+  margin: auto;
+  display: grid;
+  gap: 20px;
 }
 
-/* MAIN */
-.main{
-  display:grid;
-  grid-template-columns:2fr 1.3fr;
-  gap:16px;
+/* ================= PRICES ================= */
+.prices {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+  padding: 20px;
+  border-radius: 22px;
+  background: linear-gradient(135deg,#c7d2fe,#e0e7ff);
 }
 
-/* BILLING */
-.billing{
-  background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  padding:16px;
-  border-radius:22px;
-}
-.billing h3{ text-align:center }
-
-/* ICONS */
-.icon-group{
-  display:flex;
-  gap:10px;
-  margin:8px 0;
-}
-.icon-btn{
-  flex:1;
-  padding:14px 0;
-  border-radius:18px;
-  border:none;
-  font-weight:700;
-  background:#f1f5f9;
-}
-.icon-btn.active{
-  background:linear-gradient(135deg,#fde68a,#fbbf24);
+.price-box label {
+  font-size: 20px;
+  font-weight: 800;
 }
 
-/* INPUTS */
-.field{ margin-bottom:8px }
-.field label{ font-weight:700 }
-.field input{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:2px solid transparent;
+.price-box input {
+  width: 100%;
+  padding: 18px;
+  font-size: 22px;
+  border-radius: 18px;
+  border: 3px solid transparent;
 }
-.field input.active{ border-color:#6366f1 }
-
-/* RETURN AMOUNT */
-.return-box{
-  background:#dcfce7;
-  border-radius:14px;
-  padding:12px;
-  font-weight:900;
-  text-align:center;
-  font-size:20px;
-  margin-top:6px;
+.price-box input.active {
+  border-color: #6366f1;
 }
 
-/* TOTALS */
-.totals{
-  background:linear-gradient(135deg,#ecfeff,#cffafe);
-  padding:14px;
-  border-radius:22px;
-}
-.total-box{
-  background:white;
-  border-radius:16px;
-  padding:12px;
-  font-weight:700;
-  margin-bottom:8px;
-  text-align:center;
-}
-.total-box span{ font-size:24px }
-
-/* NEXT */
-.next{
-  width:100%;
-  padding:14px;
-  border-radius:16px;
-  border:none;
-  background:#6366f1;
-  color:white;
-  font-weight:700;
+/* ================= MAIN ================= */
+.main {
+  display: grid;
+  grid-template-columns: 2.2fr 1.4fr;
+  gap: 20px;
 }
 
-/* KEYPAD */
-.keypad{
-  margin-top:10px;
-  background:#111827;
-  border-radius:18px;
-  padding:12px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  border:2px solid transparent;
+/* ================= BILLING ================= */
+.billing {
+  background: linear-gradient(135deg,#fff7ed,#ffedd5);
+  padding: 20px;
+  border-radius: 26px;
 }
-.keypad.active{
-  border-color:#6366f1;
-  box-shadow:0 0 0 4px rgba(99,102,241,0.4);
+
+.billing h3 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 10px;
 }
-.keypad button{
-  padding:18px;
-  font-size:22px;
-  border-radius:14px;
-  border:none;
-  background:#374151;
-  color:white;
-  font-weight:700;
+
+/* ICON BUTTONS */
+.icon-group {
+  display: flex;
+  gap: 16px;
+  margin: 12px 0;
 }
-.keypad .del{ background:#ef4444 }
-.keypad .clr{ background:#6366f1 }
+
+.icon-btn {
+  flex: 1;
+  padding: 22px 0;
+  font-size: 22px;
+  font-weight: 800;
+  border-radius: 22px;
+  border: none;
+  background: #f1f5f9;
+}
+
+.icon-btn.active {
+  background: linear-gradient(135deg,#fde68a,#fbbf24);
+}
+
+/* INPUT FIELDS */
+.field {
+  margin-bottom: 14px;
+}
+
+.field label {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.field input {
+  width: 100%;
+  padding: 18px;
+  font-size: 22px;
+  border-radius: 18px;
+  border: 3px solid transparent;
+}
+
+.field input.active {
+  border-color: #6366f1;
+}
+
+/* RETURN BOX */
+.return-box {
+  background: #dcfce7;
+  border-radius: 18px;
+  padding: 18px;
+  font-size: 26px;
+  font-weight: 900;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* NEXT BUTTON */
+.next {
+  width: 100%;
+  padding: 20px;
+  font-size: 22px;
+  font-weight: 900;
+  border-radius: 22px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  margin-top: 14px;
+}
+
+/* ================= TOTALS ================= */
+.totals {
+  background: linear-gradient(135deg,#ecfeff,#cffafe);
+  padding: 18px;
+  border-radius: 26px;
+}
+
+.total-box {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.total-box span {
+  font-size: 30px;
+}
+
+/* ================= KEYPAD ================= */
+.keypad {
+  margin-top: 16px;
+  background: #020617;
+  border-radius: 24px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+  border: 3px solid transparent;
+}
+
+.keypad.active {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 5px rgba(99,102,241,0.4);
+}
+
+.keypad button {
+  padding: 28px;
+  font-size: 30px;
+  font-weight: 900;
+  border-radius: 20px;
+  border: none;
+  background: #374151;
+  color: white;
+}
+
+.keypad .del { background: #ef4444; }
+.keypad .clr { background: #4f46e5; }
 
 @media(max-width:900px){
-  .main{ grid-template-columns:1fr }
-  .prices{ grid-template-columns:1fr }
+  .main { grid-template-columns: 1fr; }
+  .prices { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -160,14 +205,14 @@ body{
 
 <div class="app">
 
-<!-- PRICES (NEVER RESET) -->
+<!-- ================= PRICES ================= -->
 <div class="prices">
   <div class="price-box">
-    <label>🐔 Broiler ₹/Kg</label>
+    <label>🐔 Broiler ₹ / Kg</label>
     <input id="broilerPrice" readonly>
   </div>
   <div class="price-box">
-    <label>🐓 Country ₹/Kg</label>
+    <label>🐓 Country ₹ / Kg</label>
     <input id="countryPrice" readonly>
   </div>
   <div class="price-box">
@@ -178,7 +223,7 @@ body{
 
 <div class="main">
 
-<!-- BILLING -->
+<!-- ================= BILLING ================= -->
 <div class="billing">
 <h3>🧾 Billing</h3>
 
@@ -193,12 +238,12 @@ body{
 </div>
 
 <div class="field" id="kgBlock" style="display:none">
-<label>Weight KG</label>
+<label>Weight (KG)</label>
 <input id="kgInput" readonly>
 </div>
 
 <div class="field" id="amountBlock" style="display:none">
-<label>Amount ₹</label>
+<label>Amount (₹)</label>
 <input id="amountInput" readonly>
 </div>
 
@@ -213,41 +258,40 @@ body{
 </div>
 
 <div class="return-box">
-🔁 Return ₹ <span id="returnAmt">0.00</span>
+🔁 RETURN ₹ <span id="returnAmt">0.00</span>
 </div>
 
-<button class="next" onclick="nextCustomer()">🧾 Next Customer</button>
+<button class="next" onclick="nextCustomer()">🧾 NEXT CUSTOMER</button>
 </div>
 
-<!-- TOTALS + KEYPAD -->
+<!-- ================= TOTALS + KEYPAD ================= -->
 <div class="totals">
-<div class="total-box">🐔 ₹ <span id="chickenTotal">0.00</span></div>
-<div class="total-box">🥚 ₹ <span id="eggTotal">0.00</span></div>
-<div class="total-box">💰 ₹ <span id="grandTotal">0.00</span></div>
-<div class="total-box">📊 Today ₹ <span id="dailyTotal">0.00</span></div>
+  <div class="total-box">🐔 Chicken ₹ <span id="chickenTotal">0.00</span></div>
+  <div class="total-box">🥚 Egg ₹ <span id="eggTotal">0.00</span></div>
+  <div class="total-box">💰 TOTAL ₹ <span id="grandTotal">0.00</span></div>
+  <div class="total-box">📊 TODAY ₹ <span id="dailyTotal">0.00</span></div>
 
-<div class="keypad" id="keypad">
-<button onclick="press('7')">7</button>
-<button onclick="press('8')">8</button>
-<button onclick="press('9')">9</button>
-<button onclick="press('4')">4</button>
-<button onclick="press('5')">5</button>
-<button onclick="press('6')">6</button>
-<button onclick="press('1')">1</button>
-<button onclick="press('2')">2</button>
-<button onclick="press('3')">3</button>
-<button onclick="press('.')">.</button>
-<button onclick="press('0')">0</button>
-<button class="del" onclick="backspace()">⌫</button>
-<button class="clr" onclick="clearField()">C</button>
-</div>
+  <div class="keypad" id="keypad">
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button>
+    <button onclick="press('4')">4</button>
+    <button onclick="press('5')">5</button>
+    <button onclick="press('6')">6</button>
+    <button onclick="press('1')">1</button>
+    <button onclick="press('2')">2</button>
+    <button onclick="press('3')">3</button>
+    <button onclick="press('.')">.</button>
+    <button onclick="press('0')">0</button>
+    <button class="del" onclick="backspace()">⌫</button>
+    <button class="clr" onclick="clearField()">C</button>
+  </div>
 </div>
 
 </div>
 </div>
 
 <script>
-/* ---------- DAILY SALES ---------- */
 function dateKey(){
   const d=new Date();
   return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
@@ -259,7 +303,7 @@ if(localStorage.getItem("salesDate")!==dateKey()){
 let dailySales=Number(localStorage.getItem("dailySales"))||0;
 dailyTotal.innerText=dailySales.toFixed(2);
 
-/* ---------- PRICE STORAGE ---------- */
+/* Prices */
 function savePrices(){
   localStorage.setItem("shopPrices",JSON.stringify({
     broiler:broilerPrice.value,
@@ -275,7 +319,7 @@ function loadPrices(){
 }
 loadPrices();
 
-/* ---------- ACTIVE INPUT ---------- */
+/* Active input + keypad */
 let active=null;
 const keypad=document.getElementById("keypad");
 document.querySelectorAll("input").forEach(i=>{
@@ -287,29 +331,12 @@ document.querySelectorAll("input").forEach(i=>{
   };
 });
 
-function press(v){
-  if(!active) return;
-  active.value+=v;
-  savePrices();
-  calc();
-}
-function backspace(){
-  if(!active) return;
-  active.value=active.value.slice(0,-1);
-  savePrices();
-  calc();
-}
-function clearField(){
-  if(!active) return;
-  active.value="";
-  savePrices();
-  calc();
-}
+function press(v){ if(!active) return; active.value+=v; savePrices(); calc(); }
+function backspace(){ if(!active) return; active.value=active.value.slice(0,-1); savePrices(); calc(); }
+function clearField(){ if(!active) return; active.value=""; savePrices(); calc(); }
 
-/* ---------- STATE ---------- */
+/* Chicken & Mode */
 let chicken=null, mode=null;
-
-/* ---------- SELECTION ---------- */
 function selectChicken(btn,t){
   chicken=t;
   document.getElementById("broilerBtn").classList.remove("active");
@@ -327,28 +354,22 @@ function setMode(btn,m){
   calc();
 }
 
-/* ---------- CALC ---------- */
+/* Calculation */
 function calc(){
   const egg=(Number(eggQty.value)||0)*(Number(eggPrice.value)||0);
   let chickenAmt=0;
   if(chicken&&mode){
-    const rate=chicken==="broiler"
-      ?Number(broilerPrice.value||0)
-      :Number(countryPrice.value||0);
-    chickenAmt=mode==="kg"
-      ?(Number(kgInput.value)||0)*rate
-      :Number(amountInput.value)||0;
+    const rate=chicken==="broiler"?Number(broilerPrice.value||0):Number(countryPrice.value||0);
+    chickenAmt=mode==="kg"?(Number(kgInput.value)||0)*rate:Number(amountInput.value)||0;
   }
   const total=egg+chickenAmt;
-  const ret=(Number(amountReceived.value)||0)-total;
-
+  returnAmt.innerText=((Number(amountReceived.value)||0)-total).toFixed(2);
   chickenTotal.innerText=chickenAmt.toFixed(2);
   eggTotal.innerText=egg.toFixed(2);
   grandTotal.innerText=total.toFixed(2);
-  returnAmt.innerText=ret.toFixed(2);
 }
 
-/* ---------- NEXT CUSTOMER ---------- */
+/* Next customer */
 function nextCustomer(){
   const bill=Number(grandTotal.innerText)||0;
   if(bill>0){
@@ -357,7 +378,6 @@ function nextCustomer(){
     dailyTotal.innerText=dailySales.toFixed(2);
   }
 
-  /* Clear BILLING ONLY */
   kgInput.value="";
   amountInput.value="";
   eggQty.value="";
@@ -367,12 +387,9 @@ function nextCustomer(){
   eggTotal.innerText="0.00";
   grandTotal.innerText="0.00";
 
-  /* Force re-selection (IMPORTANT) */
   chicken=null;
   mode=null;
   document.querySelectorAll(".icon-btn").forEach(b=>b.classList.remove("active"));
-  kgBlock.style.display="none";
-  amountBlock.style.display="none";
 }
 </script>
 
