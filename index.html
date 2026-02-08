@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-  content="width=device-width,
-           initial-scale=1.0,
-           maximum-scale=1.0,
-           user-scalable=no">
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Anu’s Chicken Shop – Billing</title>
 
@@ -138,8 +135,19 @@ input.active{
 <div class="container">
 <div class="main">
 
-<!-- LEFT SIDE -->
+<!-- LEFT -->
 <div>
+
+<!-- ✅ TODAY'S PRICES -->
+<div class="card">
+<h3>Today’s Prices</h3>
+<div class="row">
+  <input id="broilerPrice" readonly placeholder="Broiler ₹/kg" onclick="activate(this)">
+  <input id="countryPrice" readonly placeholder="Country ₹/kg" onclick="activate(this)">
+  <input id="eggPrice" readonly placeholder="Egg ₹" onclick="activate(this)">
+</div>
+<button class="primary" onclick="savePrices()">Save Prices</button>
+</div>
 
 <!-- ADD ITEMS -->
 <div class="card">
@@ -190,8 +198,8 @@ input.active{
 <div class="card">
 <h3>Payment Mode</h3>
 <div class="row">
-  <button id="cashBtn" class="btn" onclick="setPayment('cash')">💵 Cash</button>
-  <button id="onlineBtn" class="btn" onclick="setPayment('online')">📱 Online</button>
+  <button id="cashBtn" class="btn" onclick="setPayment('cash',this)">💵 Cash</button>
+  <button id="onlineBtn" class="btn" onclick="setPayment('online',this)">📱 Online</button>
 </div>
 
 <div id="cashBox" style="display:none">
@@ -212,7 +220,7 @@ input.active{
 
 </div>
 
-<!-- RIGHT SIDE KEYPAD -->
+<!-- RIGHT -->
 <div class="keypad-wrap">
 <div class="keypad" id="keypad">
   <button onclick="press('7')">7</button>
@@ -236,7 +244,8 @@ input.active{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, serverTimestamp
+  getFirestore, collection, addDoc, query, where,
+  orderBy, limit, getDocs, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -252,9 +261,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const today = new Date().toISOString().slice(0,10);
 
-let activeInput=null;
-let payment=null;
-
+let activeInput=null, payment=null;
 let active={broiler:false,country:false,egg:false,masala:false};
 let mode={broiler:"kg",country:"kg"};
 
@@ -277,21 +284,23 @@ window.toggleItem=(t,b)=>{
 
 window.setMode=(t,m,b)=>{
   mode[t]=m;
+  const box=b.parentElement;
+  box.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+
   document.getElementById(t+"Kg").style.display=m==="kg"?"block":"none";
   document.getElementById(t+"Rs").style.display=m==="rs"?"block":"none";
 };
 
-window.setPayment = type=>{
+window.setPayment=(type,b)=>{
   payment=type;
   cashBtn.classList.remove("active");
   onlineBtn.classList.remove("active");
 
-  if(type==="cash"){
-    cashBtn.classList.add("active");
-    cashBox.style.display="block";
-  }else{
-    onlineBtn.classList.add("active");
-    cashBox.style.display="none";
+  b.classList.add("active");
+
+  cashBox.style.display=type==="cash"?"block":"none";
+  if(type==="online"){
     received.value="";
     returnAmt.innerText="0.00";
   }
@@ -301,22 +310,23 @@ window.setPayment = type=>{
 function calc(){
   let t=0,s=[];
   if(active.broiler){
-    let a=mode.broiler==="kg"?(+broilerKg.value||0)*220:(+broilerRs.value||0);
+    let rate=+broilerPrice.value||0;
+    let a=mode.broiler==="kg"?(+broilerKg.value||0)*rate:(+broilerRs.value||0);
     if(a){t+=a;s.push(`Broiler ₹${a}`)}
   }
   if(active.country){
-    let a=mode.country==="kg"?(+countryKg.value||0)*300:(+countryRs.value||0);
+    let rate=+countryPrice.value||0;
+    let a=mode.country==="kg"?(+countryKg.value||0)*rate:(+countryRs.value||0);
     if(a){t+=a;s.push(`Country ₹${a}`)}
   }
   if(active.egg){
-    let a=(+eggQty.value||0)*6;
+    let a=(+eggQty.value||0)*(+eggPrice.value||0);
     if(a){t+=a;s.push(`Eggs ₹${a}`)}
   }
   if(active.masala){
     let a=+masalaAmt.value||0;
     if(a){t+=a;s.push(`Masala ₹${a}`)}
   }
-
   total.innerText=t.toFixed(2);
   summary.innerHTML=s.join("<br>")||"No items";
 
@@ -327,7 +337,37 @@ function calc(){
   }
 }
 
-window.confirmSale = async()=>{
+/* LOAD TODAY'S PRICE */
+async function loadPrices(){
+  const q=query(
+    collection(db,"dailyPrices"),
+    where("date","==",today),
+    orderBy("updatedAtMs","desc"),
+    limit(1)
+  );
+  const snap=await getDocs(q);
+  if(!snap.empty){
+    const d=snap.docs[0].data();
+    broilerPrice.value=d.broilerPrice;
+    countryPrice.value=d.countryPrice;
+    eggPrice.value=d.eggPrice;
+  }
+}
+loadPrices();
+
+window.savePrices=async()=>{
+  await addDoc(collection(db,"dailyPrices"),{
+    date:today,
+    broilerPrice:+broilerPrice.value,
+    countryPrice:+countryPrice.value,
+    eggPrice:+eggPrice.value,
+    updatedAt:serverTimestamp(),
+    updatedAtMs:Date.now()
+  });
+  alert("Prices saved");
+};
+
+window.confirmSale=async()=>{
   const t=+total.innerText;
   if(t<=0||!payment){alert("Incomplete bill");return}
 
