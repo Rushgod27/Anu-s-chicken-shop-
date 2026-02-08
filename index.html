@@ -2,201 +2,98 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Billing – Anu’s Chicken Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anu’s Chicken Shop – POS</title>
 
 <style>
-html,body{
-  margin:0;padding:0;
-  font-family:system-ui;
-  background:#f1f5f9;
-}
+html,body{margin:0;padding:0;font-family:system-ui;background:#f1f5f9}
 *{box-sizing:border-box}
 
-/* HEADER */
 .header{
   background:linear-gradient(135deg,#fbbf24,#f59e0b);
-  padding:16px;
+  padding:14px;
   font-size:26px;
   font-weight:900;
   text-align:center;
 }
 
-/* CONTAINER */
-.container{
-  max-width:1300px;
-  margin:auto;
-  padding:12px;
-}
+.container{max-width:1400px;margin:auto;padding:10px}
+.main{display:grid;grid-template-columns:1fr 420px;gap:14px}
 
-/* ===== iPad Layout ===== */
-.layout{
-  display:grid;
-  grid-template-columns: 1fr 380px;
-  gap:16px;
-}
-
-/* CARD */
 .card{
-  background:#fff;
-  padding:14px;
-  border-radius:18px;
-  margin-bottom:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,.05);
+  background:#fff;border-radius:18px;padding:14px;
+  margin-bottom:12px;box-shadow:0 4px 10px rgba(0,0,0,.05)
 }
 
-h3{
-  margin:0 0 10px;
-  font-size:20px;
-}
-
-/* INPUTS */
+h3{margin:0 0 10px;font-size:20px}
 .row{display:flex;gap:10px;margin-bottom:10px}
 
 input{
-  width:100%;
-  padding:16px;
-  font-size:20px;
-  border-radius:16px;
-  border:1px solid #cbd5f5;
+  width:100%;padding:14px;font-size:18px;
+  border-radius:14px;border:1px solid #cbd5f5
 }
 
-/* BUTTONS */
 .btn{
-  flex:1;
-  padding:16px;
-  font-size:18px;
-  font-weight:800;
-  border:none;
-  border-radius:16px;
-  background:#e5e7eb;
+  flex:1;padding:14px;font-size:16px;font-weight:800;
+  border:none;border-radius:14px;background:#e5e7eb
 }
-
-.btn.active{
-  background:#fbbf24;
-}
+.btn.active{background:#fbbf24}
 
 .primary{
-  background:#4f46e5;
-  color:#fff;
-  width:100%;
-  padding:18px;
-  font-size:22px;
-  font-weight:900;
-  border:none;
-  border-radius:18px;
+  background:#4f46e5;color:#fff;width:100%;
+  padding:18px;font-size:22px;font-weight:900;
+  border:none;border-radius:16px
 }
 
-.primary:disabled{opacity:.6}
-
-/* TOTAL */
 .total{
-  background:#dbeafe;
-  font-size:26px;
-  font-weight:900;
-  padding:14px;
-  border-radius:16px;
-  text-align:center;
+  background:#dbeafe;font-size:26px;font-weight:900;
+  padding:14px;border-radius:16px;text-align:center
 }
 
 .return{
-  background:#dcfce7;
-  font-size:20px;
-  font-weight:900;
-  padding:12px;
-  border-radius:16px;
-  text-align:center;
-  margin-top:6px;
+  background:#dcfce7;font-size:20px;font-weight:900;
+  padding:12px;border-radius:14px
 }
+.return.negative{background:#fee2e2;color:#991b1b}
 
-.return.negative{
-  background:#fee2e2;
-  color:#991b1b;
-}
-
-/* ===== KEYPAD ===== */
-.keypad-container{
-  position:sticky;
-  top:12px;
-  height:calc(100vh - 24px);
-}
-
+/* KEYPAD */
+.keypad-wrap{position:sticky;top:10px;height:80vh}
 .keypad{
-  background:#111827;
-  padding:14px;
-  border-radius:24px;
-  display:grid;
+  background:#111827;border-radius:26px;
+  padding:16px;display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  height:100%;
-  align-content:start;
+  gap:14px;height:100%
 }
-
 .keypad button{
-  padding:30px;
-  font-size:30px;
-  font-weight:900;
-  background:#374151;
-  color:#fff;
-  border:none;
-  border-radius:20px;
+  font-size:32px;font-weight:900;
+  border:none;border-radius:20px;
+  background:#374151;color:#fff
 }
+.keypad .del{background:#ef4444}
 
-.keypad .del{
-  background:#ef4444;
-}
-
-/* HISTORY */
-.list{
-  max-height:240px;
-  overflow:auto;
-  font-size:15px;
-}
-
-.item{
-  display:flex;
-  justify-content:space-between;
-  padding:8px 0;
-  border-bottom:1px dashed #ddd;
-}
-
-/* ===== MOBILE ===== */
 @media(max-width:900px){
-  .layout{grid-template-columns:1fr;}
-
-  .keypad-container{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:auto;
-    z-index:999;
+  .main{grid-template-columns:1fr}
+  .keypad-wrap{
+    position:fixed;bottom:0;left:0;right:0;
+    height:260px;z-index:999
   }
-
-  .keypad{
-    grid-template-columns:repeat(3,1fr);
-    border-radius:20px 20px 0 0;
-  }
-
-  .container{
-    padding-bottom:260px;
-  }
+  .container{padding-bottom:280px}
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">🐔 Anu’s Chicken Shop – Billing</div>
+<div class="header">🐔 Anu’s Chicken Shop – POS</div>
 
 <div class="container">
-<div class="layout">
+<div class="main">
 
 <!-- LEFT -->
 <div>
 
 <div class="card">
-<h3>Today’s Selling Prices</h3>
+<h3>Prices (Persistent)</h3>
 <div class="row">
   <input id="broilerPrice" placeholder="Broiler ₹/kg">
   <input id="countryPrice" placeholder="Country ₹/kg">
@@ -206,58 +103,62 @@ input{
 </div>
 
 <div class="card">
-<h3>New Billing</h3>
-
+<h3>Add Items</h3>
 <div class="row">
-  <button class="btn" onclick="selectChicken('broiler',this)">🐔 Broiler</button>
-  <button class="btn" onclick="selectChicken('country',this)">🐓 Country</button>
+  <button class="btn" onclick="toggleItem('broiler',this)">Broiler</button>
+  <button class="btn" onclick="toggleItem('country',this)">Country</button>
+  <button class="btn" onclick="toggleItem('egg',this)">Eggs</button>
+</div>
 </div>
 
-<div class="row" id="modeRow" style="display:none">
-  <button class="btn" onclick="selectMode('kg',this)">KG</button>
-  <button class="btn" onclick="selectMode('rs',this)">₹</button>
+<div class="card" id="broilerBox" style="display:none">
+<h3>Broiler</h3>
+<div class="row">
+  <button class="btn" onclick="setMode('broiler','kg',this)">KG</button>
+  <button class="btn" onclick="setMode('broiler','rs',this)">₹</button>
+</div>
+<input id="broilerKg" placeholder="KG" onclick="setActive(this)">
+<input id="broilerRs" placeholder="Amount ₹" style="display:none" onclick="setActive(this)">
 </div>
 
-<input id="kgInput" placeholder="KG" style="display:none">
-<input id="rsInput" placeholder="Chicken Amount ₹" style="display:none">
-<input id="eggQty" placeholder="Egg Quantity">
-
-<div class="card">
-<h3>Current Bill Summary</h3>
-<div id="billSummary">Nothing selected</div>
+<div class="card" id="countryBox" style="display:none">
+<h3>Country</h3>
+<div class="row">
+  <button class="btn" onclick="setMode('country','kg',this)">KG</button>
+  <button class="btn" onclick="setMode('country','rs',this)">₹</button>
+</div>
+<input id="countryKg" placeholder="KG" onclick="setActive(this)">
+<input id="countryRs" placeholder="Amount ₹" style="display:none" onclick="setActive(this)">
 </div>
 
-<div class="total">TOTAL ₹ <span id="totalAmt">0.00</span></div>
+<div class="card" id="eggBox" style="display:none">
+<h3>Eggs</h3>
+<input id="eggQty" placeholder="Quantity" onclick="setActive(this)">
 </div>
 
 <div class="card">
 <h3>Payment</h3>
-
 <div class="row">
-  <button class="btn" onclick="setPayment('cash',this)">💵 Cash</button>
-  <button class="btn" onclick="setPayment('online',this)">📱 Online</button>
+  <button class="btn" onclick="setPayment('cash',this)">Cash</button>
+  <button class="btn" onclick="setPayment('online',this)">Online</button>
 </div>
-
-<input id="received" placeholder="Amount Received ₹">
-
-<div class="return" id="returnBox">
-Return ₹ <span id="returnAmt">0.00</span>
+<div id="cashBox" style="display:none">
+  <input id="received" placeholder="Amount Received ₹" onclick="setActive(this)">
+  <div class="return" id="returnBox">Return ₹ <span id="returnAmt">0.00</span></div>
 </div>
-
-<button class="primary" id="saleBtn" onclick="confirmSale()">SALE</button>
 </div>
 
 <div class="card">
-<h3>Today’s Sale Report</h3>
-<div id="todayReport">Loading...</div>
-<button class="btn" onclick="toggleHistory()">Sell History</button>
-<div id="history" class="list" style="display:none"></div>
+<h3>Bill</h3>
+<div id="summary">No items</div>
+<div class="total">TOTAL ₹ <span id="totalAmt">0.00</span></div>
+<button class="primary" onclick="confirmSale()">SALE</button>
 </div>
 
 </div>
 
-<!-- RIGHT : KEYPAD -->
-<div class="keypad-container">
+<!-- RIGHT -->
+<div class="keypad-wrap">
 <div class="keypad">
   <button onclick="press('7')">7</button>
   <button onclick="press('8')">8</button>
@@ -277,122 +178,165 @@ Return ₹ <span id="returnAmt">0.00</span>
 </div>
 </div>
 
-<!-- ===== SCRIPT (UNCHANGED LOGIC) ===== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
-  getFirestore, doc, setDoc, addDoc,
-  collection, query, where, onSnapshot
+  getFirestore, collection, addDoc,
+  query, where, orderBy, limit, getDocs,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-const firebaseConfig={
-  apiKey:"YOUR_API_KEY",
-  authDomain:"anus-chicken-shop.firebaseapp.com",
-  projectId:"anus-chicken-shop"
+const firebaseConfig = {
+  apiKey: "AIzaSyComVLxo36wvogoBFEoWyea-_yESW9BIPU",
+  authDomain: "anus-chicken-shop.firebaseapp.com",
+  projectId: "anus-chicken-shop",
+  storageBucket: "anus-chicken-shop.firebasestorage.app",
+  messagingSenderId: "919858203138",
+  appId: "1:919858203138:web:0488b2c97155616b50751b",
+  measurementId: "G-LJTZ78QS04"
 };
 
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 const today=new Date().toISOString().slice(0,10);
 
-let activeInput=null,chicken=null,mode=null,payment=null;
+/* STATE */
+let activeInput=null;
+let payment=null;
+let active={broiler:false,country:false,egg:false};
+let mode={broiler:"kg",country:"kg"};
 
-document.querySelectorAll("input").forEach(i=>i.onclick=()=>activeInput=i);
+window.setActive=i=>activeInput=i;
+window.press=v=>{if(activeInput){activeInput.value+=v;calc()}};
+window.back=()=>{if(activeInput){activeInput.value=activeInput.value.slice(0,-1);calc()}};
 
-window.press=v=>{
-  if(!activeInput) return;
-  activeInput.value+=v; calc();
-};
-window.back=()=>{
-  if(!activeInput) return;
-  activeInput.value=activeInput.value.slice(0,-1); calc();
-};
-
-window.selectChicken=(t,b)=>{
-  chicken=t;
-  document.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
-  modeRow.style.display="flex";
+window.toggleItem=(t,b)=>{
+  active[t]=!active[t];
+  b.classList.toggle("active");
+  document.getElementById(t+"Box").style.display=active[t]?"block":"none";
   calc();
 };
 
-window.selectMode=(m,b)=>{
-  mode=m;
-  document.querySelectorAll("#modeRow .btn").forEach(x=>x.classList.remove("active"));
+window.setMode=(t,m,b)=>{
+  mode[t]=m;
+  document.getElementById(t+"Kg").style.display=m==="kg"?"block":"none";
+  document.getElementById(t+"Rs").style.display=m==="rs"?"block":"none";
+  b.parentElement.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");
-  kgInput.style.display=m==="kg"?"block":"none";
-  rsInput.style.display=m==="rs"?"block":"none";
   calc();
 };
 
 window.setPayment=(p,b)=>{
   payment=p;
-  document.querySelectorAll(".row .btn").forEach(x=>x.classList.remove("active"));
+  cashBox.style.display=p==="cash"?"block":"none";
+  b.parentElement.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");
 };
 
+/* CALC */
 function calc(){
-  let c=0;
-  if(chicken&&mode){
-    const rate=chicken==="broiler"?+broilerPrice.value:+countryPrice.value;
-    c=mode==="kg"?(+kgInput.value||0)*rate:(+rsInput.value||0);
+  let total=0,lines=[];
+  if(active.broiler){
+    let amt=mode.broiler==="kg"
+      ?(+broilerKg.value||0)*(+broilerPrice.value||0)
+      :(+broilerRs.value||0);
+    if(amt){total+=amt;lines.push(`Broiler ₹${amt.toFixed(2)}`)}
   }
-  const e=(+eggQty.value||0)*(+eggPrice.value||0);
-  const total=c+e;
+  if(active.country){
+    let amt=mode.country==="kg"
+      ?(+countryKg.value||0)*(+countryPrice.value||0)
+      :(+countryRs.value||0);
+    if(amt){total+=amt;lines.push(`Country ₹${amt.toFixed(2)}`)}
+  }
+  if(active.egg){
+    let amt=(+eggQty.value||0)*(+eggPrice.value||0);
+    if(amt){total+=amt;lines.push(`Eggs ₹${amt.toFixed(2)}`)}
+  }
   totalAmt.innerText=total.toFixed(2);
+  summary.innerHTML=lines.join("<br>")||"No items";
 
-  billSummary.innerHTML=`${chicken||""}${eggQty.value?`<br>Eggs ${eggQty.value}`:""}`;
-
-  const r=(+received.value||0)-total;
-  returnAmt.innerText=r.toFixed(2);
-  returnBox.classList.toggle("negative",r<0);
+  if(payment==="cash"){
+    let r=(+received.value||0)-total;
+    returnAmt.innerText=r.toFixed(2);
+    returnBox.classList.toggle("negative",r<0);
+  }
 }
 
+/* 🔐 LOAD LATEST PRICE (GUARANTEED) */
+async function loadPrices(){
+  const q=query(
+    collection(db,"dailyPrices"),
+    where("date","==",today),
+    orderBy("updatedAtMs","desc"),
+    limit(1)
+  );
+  const snap=await getDocs(q);
+  if(!snap.empty){
+    const d=snap.docs[0].data();
+    broilerPrice.value=d.broilerPrice;
+    countryPrice.value=d.countryPrice;
+    eggPrice.value=d.eggPrice;
+  }
+}
+loadPrices();
+
+/* SAVE PRICES */
 window.savePrices=async()=>{
-  await setDoc(doc(db,"dailyConfig",today),{
-    broilerSell:+broilerPrice.value,
-    countrySell:+countryPrice.value,
-    eggSell:+eggPrice.value
-  },{merge:true});
-  alert("Prices saved");
-};
-
-window.confirmSale=async()=>{
-  if(!chicken||!mode||!payment||+totalAmt.innerText<=0) return;
-  if(!confirm("Confirm this sale?")) return;
-
-  saleBtn.disabled=true;
-  saleBtn.innerText="Saving...";
-
-  await addDoc(collection(db,"sales"),{
+  await addDoc(collection(db,"dailyPrices"),{
     date:today,
-    time:new Date().toLocaleTimeString(),
-    broilerKg:chicken==="broiler"&&mode==="kg"?+kgInput.value:0,
-    countryKg:chicken==="country"&&mode==="kg"?+kgInput.value:0,
-    eggs:+eggQty.value||0,
-    total:+totalAmt.innerText,
-    payment
+    broilerPrice:+broilerPrice.value,
+    countryPrice:+countryPrice.value,
+    eggPrice:+eggPrice.value,
+    updatedAt:serverTimestamp(),
+    updatedAtMs:Date.now() // 🔑 REAL FIX
   });
-
-  location.reload();
+  alert("Price saved");
 };
 
-onSnapshot(query(collection(db,"sales"),where("date","==",today)),snap=>{
-  let t=0,b=0,c=0,e=0;
-  history.innerHTML="";
-  snap.forEach(d=>{
-    const v=d.data();
-    t+=v.total||0;
-    b+=v.broilerKg||0;
-    c+=v.countryKg||0;
-    e+=v.eggs||0;
-    history.innerHTML+=`<div class="item">₹${v.total} (${v.time})</div>`;
-  });
-  todayReport.innerHTML=`₹${t}<br>Broiler ${b}kg | Country ${c}kg | Eggs ${e}`;
-});
+/* SAVE SALE */
+window.confirmSale=async()=>{
+  const total=+totalAmt.innerText;
+  if(total<=0||!payment){alert("Incomplete bill");return}
 
-window.toggleHistory=()=>{
-  history.style.display=history.style.display==="none"?"block":"none";
+  const sale={date:today,time:new Date().toLocaleTimeString(),items:{},total,payment};
+
+  if(active.broiler){
+    let rate=+broilerPrice.value||0;
+    let amt=mode.broiler==="kg"
+      ?(+broilerKg.value||0)*rate
+      :(+broilerRs.value||0);
+    sale.items.broiler={
+      mode:mode.broiler,
+      qty:mode.broiler==="kg"?+broilerKg.value||0:+(amt/rate).toFixed(3),
+      rate,amount:amt
+    };
+  }
+
+  if(active.country){
+    let rate=+countryPrice.value||0;
+    let amt=mode.country==="kg"
+      ?(+countryKg.value||0)*rate
+      :(+countryRs.value||0);
+    sale.items.country={
+      mode:mode.country,
+      qty:mode.country==="kg"?+countryKg.value||0:+(amt/rate).toFixed(3),
+      rate,amount:amt
+    };
+  }
+
+  if(active.egg){
+    let q=+eggQty.value||0;
+    sale.items.eggs={qty:q,rate:+eggPrice.value||0,amount:q*(+eggPrice.value||0)};
+  }
+
+  if(payment==="cash"){
+    sale.received=+received.value||0;
+    sale.return=sale.received-total;
+  }
+
+  await addDoc(collection(db,"sales"),sale);
+  alert("Sale saved");
+  location.reload();
 };
 </script>
 
