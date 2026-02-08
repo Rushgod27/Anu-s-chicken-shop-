@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- 🔒 LOCK iPAD ZOOM -->
 <meta name="viewport"
   content="width=device-width,
            initial-scale=1.0,
@@ -24,8 +23,7 @@ html,body{
 
 .header{
   background:linear-gradient(135deg,#fbbf24,#f59e0b);
-  padding:14px;font-size:26px;font-weight:900;
-  text-align:center;
+  padding:14px;font-size:26px;font-weight:900;text-align:center;
 }
 
 .container{max-width:1400px;margin:auto;padding:10px}
@@ -114,9 +112,9 @@ input.active{
 <div class="card">
 <h3>Prices</h3>
 <div class="row">
-  <input id="broilerPrice" placeholder="Broiler ₹/kg" readonly onclick="activate(this)">
-  <input id="countryPrice" placeholder="Country ₹/kg" readonly onclick="activate(this)">
-  <input id="eggPrice" placeholder="Egg ₹" readonly onclick="activate(this)">
+  <input id="broilerPrice" readonly placeholder="Broiler ₹/kg" onclick="activate(this)">
+  <input id="countryPrice" readonly placeholder="Country ₹/kg" onclick="activate(this)">
+  <input id="eggPrice" readonly placeholder="Egg ₹" onclick="activate(this)">
 </div>
 <button class="primary" onclick="savePrices()">Save Prices</button>
 </div>
@@ -127,9 +125,17 @@ input.active{
   <button class="btn" onclick="toggle('broiler',this)">Broiler</button>
   <button class="btn" onclick="toggle('country',this)">Country</button>
   <button class="btn" onclick="toggle('egg',this)">Eggs</button>
+  <button class="btn" onclick="toggle('masala',this)">Masala</button>
 </div>
 </div>
 
+<!-- MASALA -->
+<div class="card" id="masalaBox" style="display:none">
+<h3>Masala</h3>
+<input id="masalaAmt" readonly placeholder="Masala Amount ₹" onclick="activate(this)">
+</div>
+
+<!-- OTHER ITEMS (unchanged) -->
 <div class="card" id="broilerBox" style="display:none">
 <h3>Broiler</h3>
 <div class="row">
@@ -178,7 +184,7 @@ input.active{
 
 </div>
 
-<!-- RIGHT -->
+<!-- RIGHT KEYPAD -->
 <div class="keypad-wrap">
 <div class="keypad" id="keypad">
   <button onclick="press('7')">7</button>
@@ -207,15 +213,13 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-/* 🔥 YOUR FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyComVLxo36wvogoBFEoWyea-_yESW9BIPU",
   authDomain: "anus-chicken-shop.firebaseapp.com",
   projectId: "anus-chicken-shop",
   storageBucket: "anus-chicken-shop.firebasestorage.app",
   messagingSenderId: "919858203138",
-  appId: "1:919858203138:web:0488b2c97155616b50751b",
-  measurementId: "G-LJTZ78QS04"
+  appId: "1:919858203138:web:0488b2c97155616b50751b"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -223,31 +227,25 @@ const db = getFirestore(app);
 const today = new Date().toISOString().slice(0,10);
 
 let activeInput=null, payment=null;
-let active={broiler:false,country:false,egg:false};
+let active={broiler:false,country:false,egg:false,masala:false};
 let mode={broiler:"kg",country:"kg"};
 
-/* INPUT HANDLING */
-window.activate = el => {
+window.activate = el=>{
   document.querySelectorAll("input").forEach(i=>i.classList.remove("active"));
   el.classList.add("active");
-  activeInput = el;
+  activeInput=el;
   keypad.classList.add("active");
 };
+window.press=v=>{if(activeInput){activeInput.value+=v;calc()}};
+window.back=()=>{if(activeInput){activeInput.value=activeInput.value.slice(0,-1);calc()}};
 
-window.press = v => {
-  if(activeInput){ activeInput.value += v; calc(); }
-};
-window.back = () => {
-  if(activeInput){ activeInput.value = activeInput.value.slice(0,-1); calc(); }
-};
-
-/* UI LOGIC */
 window.toggle=(t,b)=>{
   active[t]=!active[t];
   b.classList.toggle("active");
   document.getElementById(t+"Box").style.display=active[t]?"block":"none";
   calc();
 };
+
 window.setMode=(t,m,b)=>{
   mode[t]=m;
   document.getElementById(t+"Kg").style.display=m==="kg"?"block":"none";
@@ -255,14 +253,12 @@ window.setMode=(t,m,b)=>{
   b.parentElement.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");
 };
+
 window.pay=(p,b)=>{
   payment=p;
   cashBox.style.display=p==="cash"?"block":"none";
-  b.parentElement.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
 };
 
-/* CALC */
 function calc(){
   let t=0,s=[];
   if(active.broiler){
@@ -277,6 +273,10 @@ function calc(){
     let a=(+eggQty.value||0)*(+eggPrice.value||0);
     if(a){t+=a;s.push(`Eggs ₹${a}`)}
   }
+  if(active.masala){
+    let a=+masalaAmt.value||0;
+    if(a){t+=a;s.push(`Masala ₹${a}`)}
+  }
   total.innerText=t.toFixed(2);
   summary.innerHTML=s.join("<br>")||"No items";
 
@@ -287,25 +287,6 @@ function calc(){
   }
 }
 
-/* LOAD PRICES */
-async function loadPrices(){
-  const q=query(
-    collection(db,"dailyPrices"),
-    where("date","==",today),
-    orderBy("updatedAtMs","desc"),
-    limit(1)
-  );
-  const snap=await getDocs(q);
-  if(!snap.empty){
-    const d=snap.docs[0].data();
-    broilerPrice.value=d.broilerPrice;
-    countryPrice.value=d.countryPrice;
-    eggPrice.value=d.eggPrice;
-  }
-}
-loadPrices();
-
-/* SAVE PRICES */
 window.savePrices=async()=>{
   await addDoc(collection(db,"dailyPrices"),{
     date:today,
@@ -318,47 +299,19 @@ window.savePrices=async()=>{
   alert("Prices saved");
 };
 
-/* SAVE SALE */
 window.confirmSale=async()=>{
   const t=+total.innerText;
   if(t<=0||!payment){alert("Incomplete bill");return}
-
   const sale={
     date:today,
-    time:new Date().toLocaleTimeString(),
     payment,
     total:t,
     items:{},
     createdAt:serverTimestamp()
   };
-
-  if(active.broiler){
-    let rate=+broilerPrice.value||0;
-    let amt=mode.broiler==="kg"?(+broilerKg.value||0)*rate:(+broilerRs.value||0);
-    sale.items.broiler={
-      qty:mode.broiler==="kg"?+broilerKg.value||0:+(amt/rate).toFixed(3),
-      rate,amount:amt
-    };
+  if(active.masala){
+    sale.items.masala={amount:+masalaAmt.value||0};
   }
-  if(active.country){
-    let rate=+countryPrice.value||0;
-    let amt=mode.country==="kg"?(+countryKg.value||0)*rate:(+countryRs.value||0);
-    sale.items.country={
-      qty:mode.country==="kg"?+countryKg.value||0:+(amt/rate).toFixed(3),
-      rate,amount:amt
-    };
-  }
-  if(active.egg){
-    let q=+eggQty.value||0;
-    sale.items.eggs={qty:q,rate:+eggPrice.value||0,amount:q*(+eggPrice.value||0)};
-  }
-
-  if(payment==="cash"){
-    sale.received=+received.value||0;
-    sale.return=sale.received-t;
-    if(sale.received<t){alert("Received less than total");return}
-  }
-
   await addDoc(collection(db,"sales"),sale);
   alert("Sale saved");
   location.reload();
