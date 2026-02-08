@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Anu’s Chicken Shop – Sales History</title>
+
+<style>
+html,body{
+  margin:0;padding:0;
+  font-family:system-ui;
+  background:#f1f5f9;
+}
+
+.header{
+  background:linear-gradient(135deg,#0ea5e9,#0369a1);
+  color:#fff;
+  padding:16px;
+  font-size:26px;
+  font-weight:900;
+  text-align:center;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:16px;
+}
+
+/* FILTER BAR */
+.filters{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr auto;
+  gap:12px;
+  background:#fff;
+  padding:16px;
+  border-radius:18px;
+  box-shadow:0 4px 10px rgba(0,0,0,.06);
+  margin-bottom:16px;
+}
+.filters input, .filters select{
+  padding:12px;
+  border-radius:12px;
+  font-size:16px;
+  border:1px solid #cbd5f5;
+}
+.filters button{
+  padding:12px 20px;
+  font-size:16px;
+  font-weight:800;
+  border:none;
+  border-radius:12px;
+  background:#4f46e5;
+  color:#fff;
+}
+
+/* SUMMARY */
+.summary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-bottom:16px;
+}
+.sum-card{
+  background:#fff;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 4px 10px rgba(0,0,0,.06);
+}
+.sum-card h4{
+  margin:0;
+  font-size:14px;
+  color:#64748b;
+}
+.sum-card .value{
+  margin-top:6px;
+  font-size:22px;
+  font-weight:900;
+}
+
+/* BILL */
+.bill{
+  background:#fff;
+  padding:16px;
+  border-radius:18px;
+  margin-bottom:14px;
+  box-shadow:0 4px 10px rgba(0,0,0,.06);
+}
+.bill.refunded{opacity:.6;border:2px dashed #f59e0b}
+
+.bill-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.time{font-weight:700;color:#475569}
+.total{font-size:20px;font-weight:900}
+
+.badge{
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:800;
+}
+.cash{background:#dcfce7;color:#166534}
+.online{background:#e0e7ff;color:#3730a3}
+.refund{background:#fff7ed;color:#c2410c}
+
+.items{
+  border-top:1px dashed #cbd5f5;
+  margin-top:10px;
+  padding-top:8px;
+}
+.item{
+  display:flex;
+  justify-content:space-between;
+  font-size:15px;
+}
+
+.empty{
+  text-align:center;
+  color:#64748b;
+  margin-top:40px;
+  font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">🧾 Sales History</div>
+
+<div class="container">
+
+<!-- FILTERS -->
+<div class="filters">
+  <input type="date" id="fromDate">
+  <input type="date" id="toDate">
+
+  <select id="sortBy">
+    <option value="new">Newest first</option>
+    <option value="old">Oldest first</option>
+    <option value="high">Amount high → low</option>
+    <option value="low">Amount low → high</option>
+  </select>
+
+  <button onclick="applyFilter()">Apply</button>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="sum-card"><h4>Total Sale</h4><div class="value">₹ <span id="sumTotal">0</span></div></div>
+  <div class="sum-card"><h4>Broiler Sold</h4><div class="value"><span id="sumBroiler">0</span> kg</div></div>
+  <div class="sum-card"><h4>Country Sold</h4><div class="value"><span id="sumCountry">0</span> kg</div></div>
+  <div class="sum-card"><h4>Eggs Sold</h4><div class="value"><span id="sumEggs">0</span></div></div>
+  <div class="sum-card"><h4>Masala</h4><div class="value">₹ <span id="sumMasala">0</span></div></div>
+  <div class="sum-card"><h4>Bills</h4><div class="value"><span id="sumBills">0</span></div></div>
+</div>
+
+<div id="list">Loading…</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyComVLxo36wvogoBFEoWyea-_yESW9BIPU",
+  authDomain: "anus-chicken-shop.firebaseapp.com",
+  projectId: "anus-chicken-shop",
+  storageBucket: "anus-chicken-shop.firebasestorage.app",
+  messagingSenderId: "919858203138",
+  appId: "1:919858203138:web:0488b2c97155616b50751b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* default dates */
+const today = new Date().toISOString().slice(0,10);
+fromDate.value = today;
+toDate.value = today;
+
+let allSales = [];
+
+async function loadSales(){
+  const snap = await getDocs(collection(db,"sales"));
+  allSales = [];
+
+  snap.forEach(d=>{
+    const s = d.data();
+    if(s.status==="deleted") return;
+
+    // 🔐 SAFE DATE EXTRACTION
+    const saleDate = s.date
+      ? s.date
+      : s.createdAt?.toDate?.().toISOString().slice(0,10);
+
+    if(!saleDate) return;
+
+    allSales.push({
+      ...s,
+      _saleDate: saleDate
+    });
+  });
+
+  applyFilter();
+}
+
+window.applyFilter = ()=>{
+  const from = fromDate.value;
+  const to = toDate.value;
+
+  let data = allSales.filter(
+    s => s._saleDate >= from && s._saleDate <= to
+  );
+
+  /* SORTING */
+  const sort = sortBy.value;
+  if(sort==="new") data.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  if(sort==="old") data.sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
+  if(sort==="high") data.sort((a,b)=>(b.total||0)-(a.total||0));
+  if(sort==="low") data.sort((a,b)=>(a.total||0)-(b.total||0));
+
+  /* TOTALS */
+  let total=0, broiler=0, country=0, eggs=0, masala=0;
+  data.forEach(s=>{
+    if(s.status==="refunded") return;
+    total+=s.total||0;
+    broiler+=s.items?.broiler?.qty||0;
+    country+=s.items?.country?.qty||0;
+    eggs+=s.items?.eggs?.qty||0;
+    masala+=s.items?.masala?.amount||0;
+  });
+
+  sumTotal.innerText=total.toFixed(2);
+  sumBroiler.innerText=broiler.toFixed(3);
+  sumCountry.innerText=country.toFixed(3);
+  sumEggs.innerText=eggs;
+  sumMasala.innerText=masala.toFixed(2);
+  sumBills.innerText=data.length;
+
+  if(data.length===0){
+    list.innerHTML=`<div class="empty">No sales in this range</div>`;
+    return;
+  }
+
+  let html="";
+  data.forEach(s=>{
+    const badge = s.status==="refunded"
+      ? `<div class="badge refund">REFUNDED</div>`
+      : `<div class="badge ${s.payment}">${s.payment.toUpperCase()}</div>`;
+
+    let items="";
+    if(s.items?.broiler) items+=`<div class="item">🐔 Broiler<span>₹${s.items.broiler.amount}</span></div>`;
+    if(s.items?.country) items+=`<div class="item">🐓 Country<span>₹${s.items.country.amount}</span></div>`;
+    if(s.items?.eggs) items+=`<div class="item">🥚 Eggs<span>₹${s.items.eggs.amount}</span></div>`;
+    if(s.items?.masala) items+=`<div class="item">🌶️ Masala<span>₹${s.items.masala.amount}</span></div>`;
+
+    html+=`
+      <div class="bill ${s.status||''}">
+        <div class="bill-top">
+          <div class="time">${s._saleDate}</div>
+          ${badge}
+          <div class="total">₹${s.total}</div>
+        </div>
+        <div class="items">${items}</div>
+      </div>
+    `;
+  });
+
+  list.innerHTML=html;
+};
+
+loadSales();
+</script>
+
+</body>
+</html>
