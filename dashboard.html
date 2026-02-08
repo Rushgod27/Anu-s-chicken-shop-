@@ -3,60 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Sales History</title>
+<title>Today Dashboard</title>
 
 <style>
 body{margin:0;font-family:system-ui;background:#f1f5f9}
-.header{background:#0ea5e9;color:#fff;padding:16px;font-size:26px;font-weight:900;text-align:center}
-.container{max-width:1200px;margin:auto;padding:16px}
-.filters, .summary{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
-.filters{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px}
-.filters input,.filters select,.filters button{padding:12px;font-size:16px}
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.card{background:#f8fafc;border-radius:12px;padding:14px}
-.bill{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px}
-.bill.refunded{opacity:.6;border:2px dashed #f59e0b}
-.bill-top{display:flex;justify-content:space-between;font-weight:800}
-.items{border-top:1px dashed #cbd5f5;margin-top:8px;padding-top:6px}
-.item{display:flex;justify-content:space-between;font-size:15px}
-.badge{padding:4px 10px;border-radius:999px;font-weight:800}
-.cash{background:#dcfce7}
-.online{background:#e0e7ff}
-.refund{background:#fff7ed}
+.header{background:#16a34a;color:#fff;padding:16px;font-size:26px;font-weight:900;text-align:center}
+.container{max-width:1100px;margin:auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+h4{margin:0;color:#64748b;font-size:14px}
+.value{margin-top:6px;font-size:26px;font-weight:900}
 </style>
 </head>
 
 <body>
-<div class="header">🧾 Sales History</div>
+<div class="header">📊 Today’s Dashboard</div>
+
 <div class="container">
+<div class="grid">
+  <div class="card"><h4>Total Sale</h4><div class="value">₹ <span id="totalSale">0</span></div></div>
+  <div class="card"><h4>Cash</h4><div class="value">₹ <span id="cashSale">0</span></div></div>
+  <div class="card"><h4>Online</h4><div class="value">₹ <span id="onlineSale">0</span></div></div>
+  <div class="card"><h4>Bills</h4><div class="value"><span id="billCount">0</span></div></div>
 
-<div class="filters">
-  <input type="date" id="fromDate">
-  <input type="date" id="toDate">
-  <select id="sortBy">
-    <option value="new">Newest</option>
-    <option value="old">Oldest</option>
-    <option value="high">Amount ↓</option>
-    <option value="low">Amount ↑</option>
-  </select>
-  <button onclick="applyFilter()">Apply</button>
+  <div class="card"><h4>Broiler Sold</h4><div class="value"><span id="broilerKg">0</span> kg</div></div>
+  <div class="card"><h4>Country Sold</h4><div class="value"><span id="countryKg">0</span> kg</div></div>
+  <div class="card"><h4>Eggs Sold</h4><div class="value"><span id="eggQty">0</span></div></div>
+  <div class="card"><h4>Masala</h4><div class="value">₹ <span id="masalaAmt">0</span></div></div>
 </div>
-
-<div class="summary">
-  <div class="card">Total ₹ <b id="sumTotal">0</b></div>
-  <div class="card">Broiler <b id="sumBroiler">0</b> kg</div>
-  <div class="card">Country <b id="sumCountry">0</b> kg</div>
-  <div class="card">Eggs <b id="sumEggs">0</b></div>
-  <div class="card">Masala ₹ <b id="sumMasala">0</b></div>
-  <div class="card">Bills <b id="sumBills">0</b></div>
-</div>
-
-<div id="list">Loading…</div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, getDocs } 
+import { getFirestore, collection, query, where, getDocs } 
 from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -68,75 +47,47 @@ const firebaseConfig = {
   appId: "1:919858203138:web:0488b2c97155616b50751b"
 };
 
-initializeApp(firebaseConfig);
-const db = getFirestore();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const today = new Date().toISOString().slice(0,10);
-fromDate.value = toDate.value = today;
 
-let allSales=[];
+async function loadDashboard(){
+  const q = query(collection(db,"sales"), where("date","==",today));
+  const snap = await getDocs(q);
 
-async function loadAll(){
-  const snap = await getDocs(collection(db,"sales"));
-  allSales=[];
-  snap.forEach(d=>{
-    const s=d.data();
+  let total=0,cash=0,online=0,bills=0;
+  let broiler=0,country=0,eggs=0,masala=0;
+
+  snap.forEach(doc=>{
+    const s = doc.data();
     if(s.status==="deleted") return;
-    const saleDate = s.date ?? s.createdAt?.toDate?.().toISOString().slice(0,10);
-    if(!saleDate) return;
-    allSales.push({...s,_saleDate:saleDate});
+
+    bills++;
+
+    if(s.status!=="refunded"){
+      total += s.total || 0;
+      if(s.payment==="cash") cash += s.total || 0;
+      if(s.payment==="online") online += s.total || 0;
+
+      if(s.items?.broiler) broiler += s.items.broiler.qty || 0;
+      if(s.items?.country) country += s.items.country.qty || 0;
+      if(s.items?.eggs) eggs += s.items.eggs.qty || 0;
+      if(s.items?.masala) masala += s.items.masala.amount || 0;
+    }
   });
-  applyFilter();
+
+  totalSale.innerText = total.toFixed(2);
+  cashSale.innerText = cash.toFixed(2);
+  onlineSale.innerText = online.toFixed(2);
+  billCount.innerText = bills;
+  broilerKg.innerText = broiler.toFixed(3);
+  countryKg.innerText = country.toFixed(3);
+  eggQty.innerText = eggs;
+  masalaAmt.innerText = masala.toFixed(2);
 }
 
-window.applyFilter = ()=>{
-  let data = allSales.filter(
-    s => s._saleDate >= fromDate.value && s._saleDate <= toDate.value
-  );
-
-  const sort = sortBy.value;
-  if(sort==="new") data.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  if(sort==="old") data.sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
-  if(sort==="high") data.sort((a,b)=>(b.total||0)-(a.total||0));
-  if(sort==="low") data.sort((a,b)=>(a.total||0)-(b.total||0));
-
-  let total=0,broiler=0,country=0,eggs=0,masala=0;
-  data.forEach(s=>{
-    if(s.status==="refunded") return;
-    total+=s.total||0;
-    broiler+=s.items?.broiler?.qty||0;
-    country+=s.items?.country?.qty||0;
-    eggs+=s.items?.eggs?.qty||0;
-    masala+=s.items?.masala?.amount||0;
-  });
-
-  sumTotal.innerText=total.toFixed(2);
-  sumBroiler.innerText=broiler.toFixed(3);
-  sumCountry.innerText=country.toFixed(3);
-  sumEggs.innerText=eggs;
-  sumMasala.innerText=masala.toFixed(2);
-  sumBills.innerText=data.length;
-
-  list.innerHTML=data.map(s=>`
-    <div class="bill ${s.status||''}">
-      <div class="bill-top">
-        <span>${s._saleDate}</span>
-        <span class="badge ${s.status==="refunded"?'refund':s.payment}">
-          ${s.status==="refunded"?'REFUNDED':s.payment.toUpperCase()}
-        </span>
-        <span>₹${s.total}</span>
-      </div>
-      <div class="items">
-        ${s.items?.broiler?`<div class="item">🐔 Broiler<span>₹${s.items.broiler.amount}</span></div>`:''}
-        ${s.items?.country?`<div class="item">🐓 Country<span>₹${s.items.country.amount}</span></div>`:''}
-        ${s.items?.eggs?`<div class="item">🥚 Eggs<span>₹${s.items.eggs.amount}</span></div>`:''}
-        ${s.items?.masala?`<div class="item">🌶️ Masala<span>₹${s.items.masala.amount}</span></div>`:''}
-      </div>
-    </div>
-  `).join("") || "No sales";
-};
-
-loadAll();
+loadDashboard();
 </script>
 </body>
 </html>
