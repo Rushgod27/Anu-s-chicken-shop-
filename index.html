@@ -367,19 +367,123 @@ window.savePrices=async()=>{
   alert("Prices saved");
 };
 
-window.confirmSale=async()=>{
-  const t=+total.innerText;
-  if(t<=0||!payment){alert("Incomplete bill");return}
+window.confirmSale = async () => {
+  const totalAmount = +total.innerText;
 
-  await addDoc(collection(db,"sales"),{
-    date:today,
+  if (totalAmount <= 0) {
+    alert("No items in bill");
+    return;
+  }
+
+  if (!payment) {
+    alert("Select payment mode");
+    return;
+  }
+
+  /* 🔒 BUILD SALE OBJECT */
+  const sale = {
+    date: today,
+    createdAt: serverTimestamp(),
     payment,
-    total:t,
-    createdAt:serverTimestamp()
-  });
+    total: totalAmount,
 
-  alert("Sale saved");
-  location.reload();
+    // 🔥 SAVE TODAY'S PRICES
+    prices: {
+      broiler: +broilerPrice.value || 0,
+      country: +countryPrice.value || 0,
+      egg: +eggPrice.value || 0
+    },
+
+    // 🔥 SOLD ITEMS
+    items: {}
+  };
+
+  /* 🐔 BROILER */
+  if (active.broiler) {
+    const rate = +broilerPrice.value || 0;
+    const qty =
+      mode.broiler === "kg"
+        ? +broilerKg.value || 0
+        : rate > 0
+          ? (+broilerRs.value || 0) / rate
+          : 0;
+
+    const amount = qty * rate;
+
+    if (qty > 0) {
+      sale.items.broiler = {
+        qty: +qty.toFixed(3),
+        rate,
+        amount: +amount.toFixed(2)
+      };
+    }
+  }
+
+  /* 🐓 COUNTRY */
+  if (active.country) {
+    const rate = +countryPrice.value || 0;
+    const qty =
+      mode.country === "kg"
+        ? +countryKg.value || 0
+        : rate > 0
+          ? (+countryRs.value || 0) / rate
+          : 0;
+
+    const amount = qty * rate;
+
+    if (qty > 0) {
+      sale.items.country = {
+        qty: +qty.toFixed(3),
+        rate,
+        amount: +amount.toFixed(2)
+      };
+    }
+  }
+
+  /* 🥚 EGGS */
+  if (active.egg) {
+    const qty = +eggQty.value || 0;
+    const rate = +eggPrice.value || 0;
+
+    if (qty > 0) {
+      sale.items.eggs = {
+        qty,
+        rate,
+        amount: qty * rate
+      };
+    }
+  }
+
+  /* 🌶️ MASALA */
+  if (active.masala) {
+    const amount = +masalaAmt.value || 0;
+    if (amount > 0) {
+      sale.items.masala = {
+        amount
+      };
+    }
+  }
+
+  /* 💵 CASH EXTRA FIELDS */
+  if (payment === "cash") {
+    sale.received = +received.value || 0;
+    sale.return = sale.received - totalAmount;
+
+    if (sale.received < totalAmount) {
+      alert("Received amount is less than total");
+      return;
+    }
+  }
+
+  /* 🚀 SAVE TO FIREBASE */
+  try {
+    await addDoc(collection(db, "sales"), sale);
+    alert("Sale saved successfully");
+    location.reload();
+  } catch (err) {
+    console.error(err);
+    alert("Failed to save sale");
+  }
 };
 </script>
 
