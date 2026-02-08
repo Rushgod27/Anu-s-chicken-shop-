@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Anu’s Chicken Shop – Today Dashboard</title>
+
+<style>
+html,body{
+  margin:0;padding:0;
+  font-family:system-ui;
+  background:#f1f5f9;
+}
+
+.header{
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#fff;
+  padding:16px;
+  font-size:26px;
+  font-weight:900;
+  text-align:center;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:16px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+
+/* CARD */
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,.06);
+}
+
+.card h4{
+  margin:0;
+  font-size:16px;
+  color:#475569;
+}
+
+.card .value{
+  margin-top:6px;
+  font-size:28px;
+  font-weight:900;
+}
+
+/* COLORS */
+.green{color:#16a34a}
+.blue{color:#2563eb}
+.orange{color:#ea580c}
+.purple{color:#7c3aed}
+
+/* SECTION TITLE */
+.section{
+  margin:28px 0 14px;
+  font-size:20px;
+  font-weight:900;
+}
+
+/* REFRESH */
+.refresh{
+  margin-top:20px;
+  width:100%;
+  padding:16px;
+  font-size:18px;
+  font-weight:800;
+  background:#0ea5e9;
+  color:#fff;
+  border:none;
+  border-radius:16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">📊 Today’s Dashboard</div>
+
+<div class="container">
+
+<!-- TOP SUMMARY -->
+<div class="grid">
+  <div class="card">
+    <h4>Total Sales</h4>
+    <div class="value green">₹ <span id="totalSales">0</span></div>
+  </div>
+
+  <div class="card">
+    <h4>Cash Sales</h4>
+    <div class="value blue">₹ <span id="cashSales">0</span></div>
+  </div>
+
+  <div class="card">
+    <h4>Online Sales</h4>
+    <div class="value purple">₹ <span id="onlineSales">0</span></div>
+  </div>
+
+  <div class="card">
+    <h4>Total Bills</h4>
+    <div class="value orange"><span id="billCount">0</span></div>
+  </div>
+</div>
+
+<!-- ITEM SUMMARY -->
+<div class="section">🐔 Items Sold Today</div>
+
+<div class="grid">
+  <div class="card">
+    <h4>Broiler Sold</h4>
+    <div class="value">🐔 <span id="broilerKg">0</span> kg</div>
+  </div>
+
+  <div class="card">
+    <h4>Country Sold</h4>
+    <div class="value">🐓 <span id="countryKg">0</span> kg</div>
+  </div>
+
+  <div class="card">
+    <h4>Eggs Sold</h4>
+    <div class="value">🥚 <span id="eggsCount">0</span></div>
+  </div>
+
+  <div class="card">
+    <h4>Masala Sold</h4>
+    <div class="value">🌶️ ₹ <span id="masalaTotal">0</span></div>
+  </div>
+</div>
+
+<button class="refresh" onclick="loadDashboard()">🔄 Refresh</button>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import {
+  getFirestore, collection, query, where, getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+/* SAME FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "AIzaSyComVLxo36wvogoBFEoWyea-_yESW9BIPU",
+  authDomain: "anus-chicken-shop.firebaseapp.com",
+  projectId: "anus-chicken-shop",
+  storageBucket: "anus-chicken-shop.firebasestorage.app",
+  messagingSenderId: "919858203138",
+  appId: "1:919858203138:web:0488b2c97155616b50751b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const today = new Date().toISOString().slice(0,10);
+
+async function loadDashboard(){
+  let total=0, cash=0, online=0, bills=0;
+  let broiler=0, country=0, eggs=0, masala=0;
+
+  const q = query(collection(db,"sales"), where("date","==",today));
+  const snap = await getDocs(q);
+
+  snap.forEach(doc=>{
+    const s = doc.data();
+    bills++;
+    total += s.total || 0;
+
+    if(s.payment==="cash") cash += s.total || 0;
+    if(s.payment==="online") online += s.total || 0;
+
+    if(s.items?.broiler) broiler += +s.items.broiler.qty || 0;
+    if(s.items?.country) country += +s.items.country.qty || 0;
+    if(s.items?.eggs) eggs += +s.items.eggs.qty || 0;
+    if(s.items?.masala) masala += +s.items.masala.amount || 0;
+  });
+
+  totalSales.innerText = total.toFixed(2);
+  cashSales.innerText = cash.toFixed(2);
+  onlineSales.innerText = online.toFixed(2);
+  billCount.innerText = bills;
+
+  broilerKg.innerText = broiler.toFixed(3);
+  countryKg.innerText = country.toFixed(3);
+  eggsCount.innerText = eggs;
+  masalaTotal.innerText = masala.toFixed(2);
+}
+
+loadDashboard();
+</script>
+
+</body>
+</html>
