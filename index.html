@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport"
   content="width=device-width,
            initial-scale=1.0,
            maximum-scale=1.0,
            user-scalable=no">
 
-<title>Anu’s Chicken Shop – POS</title>
+<title>Anu’s Chicken Shop – Billing</title>
 
 <style>
 html,body{
@@ -23,23 +22,32 @@ html,body{
 
 .header{
   background:linear-gradient(135deg,#fbbf24,#f59e0b);
-  padding:14px;font-size:26px;font-weight:900;text-align:center;
+  padding:14px;
+  font-size:26px;
+  font-weight:900;
+  text-align:center;
 }
 
 .container{max-width:1400px;margin:auto;padding:10px}
 .main{display:grid;grid-template-columns:1fr 420px;gap:14px}
 
 .card{
-  background:#fff;border-radius:18px;
-  padding:14px;margin-bottom:12px;
+  background:#fff;
+  border-radius:18px;
+  padding:14px;
+  margin-bottom:12px;
   box-shadow:0 4px 10px rgba(0,0,0,.05);
 }
+
 h3{margin:0 0 10px;font-size:20px}
 .row{display:flex;gap:10px;margin-bottom:10px}
 
 input{
-  width:100%;padding:14px;font-size:18px;
-  border-radius:14px;border:1px solid #cbd5f5;
+  width:100%;
+  padding:14px;
+  font-size:18px;
+  border-radius:14px;
+  border:1px solid #cbd5f5;
   background:#f8fafc;
 }
 input.active{
@@ -49,50 +57,74 @@ input.active{
 }
 
 .btn{
-  flex:1;padding:14px;font-size:16px;
-  font-weight:800;border:none;border-radius:14px;
+  flex:1;
+  padding:14px;
+  font-size:16px;
+  font-weight:800;
+  border:none;
+  border-radius:14px;
   background:#e5e7eb;
 }
 .btn.active{background:#fbbf24}
 
 .primary{
-  width:100%;padding:18px;font-size:22px;
-  font-weight:900;border:none;border-radius:16px;
-  background:#4f46e5;color:#fff;
+  width:100%;
+  padding:18px;
+  font-size:22px;
+  font-weight:900;
+  border:none;
+  border-radius:16px;
+  background:#4f46e5;
+  color:#fff;
 }
 
 .total{
-  background:#dbeafe;font-size:26px;font-weight:900;
-  padding:14px;border-radius:16px;text-align:center;
+  background:#dbeafe;
+  font-size:26px;
+  font-weight:900;
+  padding:14px;
+  border-radius:16px;
+  text-align:center;
 }
 
 .return{
-  background:#dcfce7;font-size:20px;
-  font-weight:900;padding:12px;border-radius:14px;
+  background:#dcfce7;
+  font-size:20px;
+  font-weight:900;
+  padding:12px;
+  border-radius:14px;
 }
 .return.negative{background:#fee2e2;color:#991b1b}
 
 /* KEYPAD */
 .keypad-wrap{position:sticky;top:10px;height:80vh}
 .keypad{
-  background:#111827;border-radius:26px;
-  padding:16px;display:grid;
+  background:#111827;
+  border-radius:26px;
+  padding:16px;
+  display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:14px;height:100%;
+  gap:14px;
+  height:100%;
 }
 .keypad.active{outline:4px solid #2563eb}
 .keypad button{
-  font-size:32px;font-weight:900;
-  border:none;border-radius:20px;
-  background:#374151;color:#fff;
+  font-size:32px;
+  font-weight:900;
+  border:none;
+  border-radius:20px;
+  background:#374151;
+  color:#fff;
 }
 .keypad .del{background:#ef4444}
 
 @media(max-width:900px){
   .main{grid-template-columns:1fr}
   .keypad-wrap{
-    position:fixed;bottom:0;left:0;right:0;
-    height:260px;z-index:999;
+    position:fixed;
+    bottom:0;left:0;right:0;
+    height:260px;
+    z-index:999;
   }
   .container{padding-bottom:280px}
 }
@@ -101,41 +133,26 @@ input.active{
 
 <body>
 
-<div class="header">🐔 Anu’s Chicken Shop – POS</div>
+<div class="header">🐔 Anu’s Chicken Shop – Billing</div>
 
 <div class="container">
 <div class="main">
 
-<!-- LEFT -->
+<!-- LEFT SIDE -->
 <div>
 
-<div class="card">
-<h3>Prices</h3>
-<div class="row">
-  <input id="broilerPrice" readonly placeholder="Broiler ₹/kg" onclick="activate(this)">
-  <input id="countryPrice" readonly placeholder="Country ₹/kg" onclick="activate(this)">
-  <input id="eggPrice" readonly placeholder="Egg ₹" onclick="activate(this)">
-</div>
-<button class="primary" onclick="savePrices()">Save Prices</button>
-</div>
-
+<!-- ADD ITEMS -->
 <div class="card">
 <h3>Add Items</h3>
 <div class="row">
-  <button class="btn" onclick="toggle('broiler',this)">Broiler</button>
-  <button class="btn" onclick="toggle('country',this)">Country</button>
-  <button class="btn" onclick="toggle('egg',this)">Eggs</button>
-  <button class="btn" onclick="toggle('masala',this)">Masala</button>
+  <button class="btn" onclick="toggleItem('broiler',this)">Broiler</button>
+  <button class="btn" onclick="toggleItem('country',this)">Country</button>
+  <button class="btn" onclick="toggleItem('egg',this)">Eggs</button>
+  <button class="btn" onclick="toggleItem('masala',this)">Masala</button>
 </div>
 </div>
 
-<!-- MASALA -->
-<div class="card" id="masalaBox" style="display:none">
-<h3>Masala</h3>
-<input id="masalaAmt" readonly placeholder="Masala Amount ₹" onclick="activate(this)">
-</div>
-
-<!-- OTHER ITEMS (unchanged) -->
+<!-- BROILER -->
 <div class="card" id="broilerBox" style="display:none">
 <h3>Broiler</h3>
 <div class="row">
@@ -146,6 +163,7 @@ input.active{
 <input id="broilerRs" readonly placeholder="Amount ₹" style="display:none" onclick="activate(this)">
 </div>
 
+<!-- COUNTRY -->
 <div class="card" id="countryBox" style="display:none">
 <h3>Country</h3>
 <div class="row">
@@ -156,17 +174,26 @@ input.active{
 <input id="countryRs" readonly placeholder="Amount ₹" style="display:none" onclick="activate(this)">
 </div>
 
+<!-- EGGS -->
 <div class="card" id="eggBox" style="display:none">
 <h3>Eggs</h3>
 <input id="eggQty" readonly placeholder="Quantity" onclick="activate(this)">
 </div>
 
-<div class="card">
-<h3>Payment</h3>
-<div class="row">
-  <button class="btn" onclick="pay('cash',this)">Cash</button>
-  <button class="btn" onclick="pay('online',this)">Online</button>
+<!-- MASALA -->
+<div class="card" id="masalaBox" style="display:none">
+<h3>Masala</h3>
+<input id="masalaAmt" readonly placeholder="Masala Amount ₹" onclick="activate(this)">
 </div>
+
+<!-- PAYMENT -->
+<div class="card">
+<h3>Payment Mode</h3>
+<div class="row">
+  <button id="cashBtn" class="btn" onclick="setPayment('cash')">💵 Cash</button>
+  <button id="onlineBtn" class="btn" onclick="setPayment('online')">📱 Online</button>
+</div>
+
 <div id="cashBox" style="display:none">
   <input id="received" readonly placeholder="Amount Received ₹" onclick="activate(this)">
   <div class="return" id="returnBox">
@@ -175,6 +202,7 @@ input.active{
 </div>
 </div>
 
+<!-- BILL -->
 <div class="card">
 <h3>Bill</h3>
 <div id="summary">No items</div>
@@ -184,7 +212,7 @@ input.active{
 
 </div>
 
-<!-- RIGHT KEYPAD -->
+<!-- RIGHT SIDE KEYPAD -->
 <div class="keypad-wrap">
 <div class="keypad" id="keypad">
   <button onclick="press('7')">7</button>
@@ -208,9 +236,7 @@ input.active{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
-  getFirestore, collection, addDoc,
-  query, where, orderBy, limit, getDocs,
-  serverTimestamp
+  getFirestore, collection, addDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -226,20 +252,23 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const today = new Date().toISOString().slice(0,10);
 
-let activeInput=null, payment=null;
+let activeInput=null;
+let payment=null;
+
 let active={broiler:false,country:false,egg:false,masala:false};
 let mode={broiler:"kg",country:"kg"};
 
 window.activate = el=>{
   document.querySelectorAll("input").forEach(i=>i.classList.remove("active"));
   el.classList.add("active");
-  activeInput=el;
+  activeInput = el;
   keypad.classList.add("active");
 };
+
 window.press=v=>{if(activeInput){activeInput.value+=v;calc()}};
 window.back=()=>{if(activeInput){activeInput.value=activeInput.value.slice(0,-1);calc()}};
 
-window.toggle=(t,b)=>{
+window.toggleItem=(t,b)=>{
   active[t]=!active[t];
   b.classList.toggle("active");
   document.getElementById(t+"Box").style.display=active[t]?"block":"none";
@@ -250,33 +279,44 @@ window.setMode=(t,m,b)=>{
   mode[t]=m;
   document.getElementById(t+"Kg").style.display=m==="kg"?"block":"none";
   document.getElementById(t+"Rs").style.display=m==="rs"?"block":"none";
-  b.parentElement.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
 };
 
-window.pay=(p,b)=>{
-  payment=p;
-  cashBox.style.display=p==="cash"?"block":"none";
+window.setPayment = type=>{
+  payment=type;
+  cashBtn.classList.remove("active");
+  onlineBtn.classList.remove("active");
+
+  if(type==="cash"){
+    cashBtn.classList.add("active");
+    cashBox.style.display="block";
+  }else{
+    onlineBtn.classList.add("active");
+    cashBox.style.display="none";
+    received.value="";
+    returnAmt.innerText="0.00";
+  }
+  calc();
 };
 
 function calc(){
   let t=0,s=[];
   if(active.broiler){
-    let a=mode.broiler==="kg"?(+broilerKg.value||0)*(+broilerPrice.value||0):(+broilerRs.value||0);
+    let a=mode.broiler==="kg"?(+broilerKg.value||0)*220:(+broilerRs.value||0);
     if(a){t+=a;s.push(`Broiler ₹${a}`)}
   }
   if(active.country){
-    let a=mode.country==="kg"?(+countryKg.value||0)*(+countryPrice.value||0):(+countryRs.value||0);
+    let a=mode.country==="kg"?(+countryKg.value||0)*300:(+countryRs.value||0);
     if(a){t+=a;s.push(`Country ₹${a}`)}
   }
   if(active.egg){
-    let a=(+eggQty.value||0)*(+eggPrice.value||0);
+    let a=(+eggQty.value||0)*6;
     if(a){t+=a;s.push(`Eggs ₹${a}`)}
   }
   if(active.masala){
     let a=+masalaAmt.value||0;
     if(a){t+=a;s.push(`Masala ₹${a}`)}
   }
+
   total.innerText=t.toFixed(2);
   summary.innerHTML=s.join("<br>")||"No items";
 
@@ -287,32 +327,17 @@ function calc(){
   }
 }
 
-window.savePrices=async()=>{
-  await addDoc(collection(db,"dailyPrices"),{
-    date:today,
-    broilerPrice:+broilerPrice.value,
-    countryPrice:+countryPrice.value,
-    eggPrice:+eggPrice.value,
-    updatedAt:serverTimestamp(),
-    updatedAtMs:Date.now()
-  });
-  alert("Prices saved");
-};
-
-window.confirmSale=async()=>{
+window.confirmSale = async()=>{
   const t=+total.innerText;
   if(t<=0||!payment){alert("Incomplete bill");return}
-  const sale={
+
+  await addDoc(collection(db,"sales"),{
     date:today,
     payment,
     total:t,
-    items:{},
     createdAt:serverTimestamp()
-  };
-  if(active.masala){
-    sale.items.masala={amount:+masalaAmt.value||0};
-  }
-  await addDoc(collection(db,"sales"),sale);
+  });
+
   alert("Sale saved");
   location.reload();
 };
