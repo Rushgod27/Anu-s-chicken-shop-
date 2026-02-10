@@ -2,129 +2,56 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Anu’s Chicken Shop – Billing</title>
 
 <style>
-html,body{
-  margin:0;padding:0;
-  font-family:system-ui;
-  background:#f1f5f9;
-  -webkit-text-size-adjust:100%;
-  touch-action:manipulation;
-}
-*{box-sizing:border-box;touch-action:manipulation}
+html,body{margin:0;padding:0;font-family:system-ui;background:#f1f5f9}
+*{box-sizing:border-box}
 
 .header{
   background:linear-gradient(135deg,#fbbf24,#f59e0b);
-  padding:14px;
-  font-size:26px;
-  font-weight:900;
-  text-align:center;
+  padding:14px;font-size:26px;font-weight:900;text-align:center
 }
 
 .container{max-width:1400px;margin:auto;padding:10px}
 .main{display:grid;grid-template-columns:1fr 420px;gap:14px}
 
 .card{
-  background:#fff;
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,.05);
+  background:#fff;border-radius:18px;padding:14px;margin-bottom:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,.05)
 }
 
-h3{margin:0 0 10px;font-size:20px}
 .row{display:flex;gap:10px;margin-bottom:10px}
+input{width:100%;padding:14px;font-size:18px;border-radius:14px;border:1px solid #cbd5f5}
 
-input{
-  width:100%;
-  padding:14px;
-  font-size:18px;
-  border-radius:14px;
-  border:1px solid #cbd5f5;
-  background:#f8fafc;
-}
-input.active{
-  border:2px solid #2563eb;
-  box-shadow:0 0 0 3px rgba(37,99,235,.25);
-  background:#fff;
-}
-
-.btn{
-  flex:1;
-  padding:14px;
-  font-size:16px;
-  font-weight:800;
-  border:none;
-  border-radius:14px;
-  background:#e5e7eb;
-}
+.btn{flex:1;padding:14px;font-size:16px;font-weight:800;border:none;border-radius:14px;background:#e5e7eb}
 .btn.active{background:#fbbf24}
 
 .primary{
-  width:100%;
-  padding:18px;
-  font-size:22px;
-  font-weight:900;
-  border:none;
-  border-radius:16px;
-  background:#4f46e5;
-  color:#fff;
+  width:100%;padding:18px;font-size:22px;font-weight:900;border:none;
+  border-radius:16px;background:#4f46e5;color:#fff
 }
 
 .total{
-  background:#dbeafe;
-  font-size:26px;
-  font-weight:900;
-  padding:14px;
-  border-radius:16px;
-  text-align:center;
+  background:#dbeafe;font-size:26px;font-weight:900;
+  padding:14px;border-radius:16px;text-align:center
 }
 
-.return{
-  background:#dcfce7;
-  font-size:20px;
-  font-weight:900;
-  padding:12px;
-  border-radius:14px;
-}
+.return{background:#dcfce7;font-size:18px;font-weight:900;padding:12px;border-radius:14px}
 .return.negative{background:#fee2e2;color:#991b1b}
 
-/* KEYPAD */
 .keypad-wrap{position:sticky;top:10px;height:80vh}
 .keypad{
-  background:#111827;
-  border-radius:26px;
-  padding:16px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  height:100%;
+  background:#111827;border-radius:26px;padding:16px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px
 }
-.keypad.active{outline:4px solid #2563eb}
 .keypad button{
-  font-size:32px;
-  font-weight:900;
-  border:none;
-  border-radius:20px;
-  background:#374151;
-  color:#fff;
+  font-size:30px;font-weight:900;border:none;border-radius:20px;
+  background:#374151;color:#fff
 }
 .keypad .del{background:#ef4444}
-
-@media(max-width:900px){
-  .main{grid-template-columns:1fr}
-  .keypad-wrap{
-    position:fixed;
-    bottom:0;left:0;right:0;
-    height:260px;
-    z-index:999;
-  }
-  .container{padding-bottom:280px}
-}
 </style>
 </head>
 
@@ -135,106 +62,93 @@ input.active{
 <div class="container">
 <div class="main">
 
-<!-- LEFT -->
 <div>
 
-<!-- ✅ TODAY'S PRICES -->
+<!-- PRICES -->
 <div class="card">
 <h3>Today’s Prices</h3>
 <div class="row">
-  <input id="broilerPrice" readonly placeholder="Broiler ₹/kg" onclick="activate(this)">
-  <input id="countryPrice" readonly placeholder="Country ₹/kg" onclick="activate(this)">
-  <input id="eggPrice" readonly placeholder="Egg ₹" onclick="activate(this)">
+<input id="broilerPrice" placeholder="Broiler ₹/kg">
+<input id="countryPrice" placeholder="Country ₹/kg">
+<input id="eggPrice" placeholder="Egg ₹">
 </div>
 <button class="primary" onclick="savePrices()">Save Prices</button>
 </div>
 
-<!-- ADD ITEMS -->
+<!-- ITEMS -->
 <div class="card">
 <h3>Add Items</h3>
 <div class="row">
-  <button class="btn" onclick="toggleItem('broiler',this)">Broiler</button>
-  <button class="btn" onclick="toggleItem('country',this)">Country</button>
-  <button class="btn" onclick="toggleItem('egg',this)">Eggs</button>
-  <button class="btn" onclick="toggleItem('masala',this)">Masala</button>
+<button class="btn" onclick="toggleItem('broiler',this)">Broiler</button>
+<button class="btn" onclick="toggleItem('country',this)">Country</button>
+<button class="btn" onclick="toggleItem('egg',this)">Eggs</button>
+<button class="btn" onclick="toggleItem('masala',this)">Masala</button>
 </div>
 </div>
 
-<!-- BROILER -->
 <div class="card" id="broilerBox" style="display:none">
 <h3>Broiler</h3>
 <div class="row">
-  <button class="btn" onclick="setMode('broiler','kg',this)">KG</button>
-  <button class="btn" onclick="setMode('broiler','rs',this)">₹</button>
+<button class="btn" onclick="setMode('broiler','kg',this)">KG</button>
+<button class="btn" onclick="setMode('broiler','rs',this)">₹</button>
 </div>
-<input id="broilerKg" readonly placeholder="KG" onclick="activate(this)">
-<input id="broilerRs" readonly placeholder="Amount ₹" style="display:none" onclick="activate(this)">
+<input id="broilerKg" placeholder="KG">
+<input id="broilerRs" placeholder="Amount ₹" style="display:none">
 </div>
 
-<!-- COUNTRY -->
 <div class="card" id="countryBox" style="display:none">
 <h3>Country</h3>
 <div class="row">
-  <button class="btn" onclick="setMode('country','kg',this)">KG</button>
-  <button class="btn" onclick="setMode('country','rs',this)">₹</button>
+<button class="btn" onclick="setMode('country','kg',this)">KG</button>
+<button class="btn" onclick="setMode('country','rs',this)">₹</button>
 </div>
-<input id="countryKg" readonly placeholder="KG" onclick="activate(this)">
-<input id="countryRs" readonly placeholder="Amount ₹" style="display:none" onclick="activate(this)">
+<input id="countryKg" placeholder="KG">
+<input id="countryRs" placeholder="Amount ₹" style="display:none">
 </div>
 
-<!-- EGGS -->
 <div class="card" id="eggBox" style="display:none">
 <h3>Eggs</h3>
-<input id="eggQty" readonly placeholder="Quantity" onclick="activate(this)">
+<input id="eggQty" placeholder="Quantity">
 </div>
 
-<!-- MASALA -->
 <div class="card" id="masalaBox" style="display:none">
 <h3>Masala</h3>
-<input id="masalaAmt" readonly placeholder="Masala Amount ₹" onclick="activate(this)">
+<input id="masalaAmt" placeholder="Amount ₹">
 </div>
 
-<!-- PAYMENT -->
 <div class="card">
-<h3>Payment Mode</h3>
+<h3>Payment</h3>
 <div class="row">
-  <button id="cashBtn" class="btn" onclick="setPayment('cash',this)">💵 Cash</button>
-  <button id="onlineBtn" class="btn" onclick="setPayment('online',this)">📱 Online</button>
+<button class="btn" onclick="setPayment('cash',this)">Cash</button>
+<button class="btn" onclick="setPayment('online',this)">Online</button>
 </div>
-
-<div id="cashBox" style="display:none">
-  <input id="received" readonly placeholder="Amount Received ₹" onclick="activate(this)">
-  <div class="return" id="returnBox">
-    Return ₹ <span id="returnAmt">0.00</span>
-  </div>
+<input id="received" placeholder="Received ₹" style="display:none">
+<div id="returnBox" class="return" style="display:none">
+Return ₹ <span id="returnAmt">0.00</span>
 </div>
 </div>
 
-<!-- BILL -->
 <div class="card">
-<h3>Bill</h3>
-<div id="summary">No items</div>
 <div class="total">TOTAL ₹ <span id="total">0.00</span></div>
 <button class="primary" onclick="confirmSale()">SALE</button>
 </div>
 
 </div>
 
-<!-- RIGHT -->
 <div class="keypad-wrap">
-<div class="keypad" id="keypad">
-  <button onclick="press('7')">7</button>
-  <button onclick="press('8')">8</button>
-  <button onclick="press('9')">9</button>
-  <button onclick="press('4')">4</button>
-  <button onclick="press('5')">5</button>
-  <button onclick="press('6')">6</button>
-  <button onclick="press('1')">1</button>
-  <button onclick="press('2')">2</button>
-  <button onclick="press('3')">3</button>
-  <button onclick="press('.')">.</button>
-  <button onclick="press('0')">0</button>
-  <button class="del" onclick="back()">⌫</button>
+<div class="keypad">
+<button onclick="add('7')">7</button>
+<button onclick="add('8')">8</button>
+<button onclick="add('9')">9</button>
+<button onclick="add('4')">4</button>
+<button onclick="add('5')">5</button>
+<button onclick="add('6')">6</button>
+<button onclick="add('1')">1</button>
+<button onclick="add('2')">2</button>
+<button onclick="add('3')">3</button>
+<button onclick="add('0')">0</button>
+<button onclick="add('.')">.</button>
+<button class="del" onclick="del()">⌫</button>
 </div>
 </div>
 
@@ -245,35 +159,26 @@ input.active{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
   getFirestore, collection, addDoc, query, where,
-  orderBy, limit, getDocs, serverTimestamp
+  orderBy, limit, getDocs, serverTimestamp,
+  doc, getDoc, setDoc, updateDoc
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyComVLxo36wvogoBFEoWyea-_yESW9BIPU",
-  authDomain: "anus-chicken-shop.firebaseapp.com",
-  projectId: "anus-chicken-shop",
-  storageBucket: "anus-chicken-shop.firebasestorage.app",
-  messagingSenderId: "919858203138",
-  appId: "1:919858203138:web:0488b2c97155616b50751b"
-};
+initializeApp({
+  apiKey:"AIzaSyComVLxo36wvogoBFEoWyea-_yESW9BIPU",
+  authDomain:"anus-chicken-shop.firebaseapp.com",
+  projectId:"anus-chicken-shop"
+});
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const today = new Date().toISOString().slice(0,10);
+const db=getFirestore();
+const today=new Date().toISOString().slice(0,10);
 
-let activeInput=null, payment=null;
+let activeInput=null,payment=null;
 let active={broiler:false,country:false,egg:false,masala:false};
 let mode={broiler:"kg",country:"kg"};
 
-window.activate = el=>{
-  document.querySelectorAll("input").forEach(i=>i.classList.remove("active"));
-  el.classList.add("active");
-  activeInput = el;
-  keypad.classList.add("active");
-};
-
-window.press=v=>{if(activeInput){activeInput.value+=v;calc()}};
-window.back=()=>{if(activeInput){activeInput.value=activeInput.value.slice(0,-1);calc()}};
+document.querySelectorAll("input").forEach(i=>i.onclick=()=>activeInput=i);
+window.add=v=>{if(activeInput){activeInput.value+=v;calc()}};
+window.del=()=>{if(activeInput){activeInput.value=activeInput.value.slice(0,-1);calc()}};
 
 window.toggleItem=(t,b)=>{
   active[t]=!active[t];
@@ -284,77 +189,36 @@ window.toggleItem=(t,b)=>{
 
 window.setMode=(t,m,b)=>{
   mode[t]=m;
-  const box=b.parentElement;
-  box.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
+  b.parentElement.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");
-
   document.getElementById(t+"Kg").style.display=m==="kg"?"block":"none";
   document.getElementById(t+"Rs").style.display=m==="rs"?"block":"none";
 };
 
-window.setPayment=(type,b)=>{
-  payment=type;
-  cashBtn.classList.remove("active");
-  onlineBtn.classList.remove("active");
-
+window.setPayment=(p,b)=>{
+  payment=p;
+  b.parentElement.querySelectorAll(".btn").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");
-
-  cashBox.style.display=type==="cash"?"block":"none";
-  if(type==="online"){
-    received.value="";
-    returnAmt.innerText="0.00";
-  }
-  calc();
+  received.style.display=p==="cash"?"block":"none";
+  returnBox.style.display=p==="cash"?"block":"none";
 };
 
 function calc(){
-  let t=0,s=[];
-  if(active.broiler){
-    let rate=+broilerPrice.value||0;
-    let a=mode.broiler==="kg"?(+broilerKg.value||0)*rate:(+broilerRs.value||0);
-    if(a){t+=a;s.push(`Broiler ₹${a}`)}
-  }
-  if(active.country){
-    let rate=+countryPrice.value||0;
-    let a=mode.country==="kg"?(+countryKg.value||0)*rate:(+countryRs.value||0);
-    if(a){t+=a;s.push(`Country ₹${a}`)}
-  }
-  if(active.egg){
-    let a=(+eggQty.value||0)*(+eggPrice.value||0);
-    if(a){t+=a;s.push(`Eggs ₹${a}`)}
-  }
-  if(active.masala){
-    let a=+masalaAmt.value||0;
-    if(a){t+=a;s.push(`Masala ₹${a}`)}
-  }
+  let t=0;
+  if(active.broiler)t+=(mode.broiler==="kg"?+broilerKg.value:(+broilerRs.value/+broilerPrice.value||0))*+broilerPrice.value;
+  if(active.country)t+=(mode.country==="kg"?+countryKg.value:(+countryRs.value/+countryPrice.value||0))*+countryPrice.value;
+  if(active.egg)t+=(+eggQty.value||0)*(+eggPrice.value||0);
+  if(active.masala)t+=(+masalaAmt.value||0);
   total.innerText=t.toFixed(2);
-  summary.innerHTML=s.join("<br>")||"No items";
 
   if(payment==="cash"){
-    let r=(+received.value||0)-t;
+    const r=(+received.value||0)-t;
     returnAmt.innerText=r.toFixed(2);
     returnBox.classList.toggle("negative",r<0);
   }
 }
 
-/* LOAD TODAY'S PRICE */
-async function loadPrices(){
-  const q=query(
-    collection(db,"dailyPrices"),
-    where("date","==",today),
-    orderBy("updatedAtMs","desc"),
-    limit(1)
-  );
-  const snap=await getDocs(q);
-  if(!snap.empty){
-    const d=snap.docs[0].data();
-    broilerPrice.value=d.broilerPrice;
-    countryPrice.value=d.countryPrice;
-    eggPrice.value=d.eggPrice;
-  }
-}
-loadPrices();
-
+/* SAVE + LOAD PRICES */
 window.savePrices=async()=>{
   await addDoc(collection(db,"dailyPrices"),{
     date:today,
@@ -367,123 +231,67 @@ window.savePrices=async()=>{
   alert("Prices saved");
 };
 
-window.confirmSale = async () => {
-  const totalAmount = +total.innerText;
-
-  if (totalAmount <= 0) {
-    alert("No items in bill");
-    return;
+(async()=>{
+  const q=query(collection(db,"dailyPrices"),
+    where("date","==",today),
+    orderBy("updatedAtMs","desc"),
+    limit(1));
+  const s=await getDocs(q);
+  if(!s.empty){
+    const d=s.docs[0].data();
+    broilerPrice.value=d.broilerPrice;
+    countryPrice.value=d.countryPrice;
+    eggPrice.value=d.eggPrice;
   }
+})();
 
-  if (!payment) {
-    alert("Select payment mode");
-    return;
+/* 🔥 CORRECT DEDUCTION (EGGS + MASALA FIXED) */
+async function deductLive(items){
+  const ref=doc(db,"stock_current","live");
+  const snap=await getDoc(ref);
+  let s=snap.exists()?snap.data():{};
+
+  s.broiler ??= {availableKg:0,soldKg:0};
+  s.country ??= {availableKg:0,soldKg:0};
+  s.eggs ??= {available:0,sold:0};
+  s.masala ??= {availableAmount:0,soldAmount:0};
+
+  if(items.broiler){s.broiler.availableKg-=items.broiler.qty;s.broiler.soldKg+=items.broiler.qty;}
+  if(items.country){s.country.availableKg-=items.country.qty;s.country.soldKg+=items.country.qty;}
+  if(items.eggs){s.eggs.available-=items.eggs.qty;s.eggs.sold+=items.eggs.qty;}
+  if(items.masala){s.masala.availableAmount-=items.masala.amount;s.masala.soldAmount+=items.masala.amount;}
+
+  await setDoc(ref,{...s,updatedAt:serverTimestamp()},{merge:true});
+}
+
+/* FIFO */
+async function consumeFIFO(type,qty){
+  let r=qty,c=0;
+  const q=query(collection(db,"stock"),where("type","==",type),where("status","==","active"),orderBy("createdAt"));
+  const snap=await getDocs(q);
+  for(const d of snap.docs){
+    if(r<=0)break;
+    const b=d.data();
+    const take=Math.min(b.remainingKg,r);
+    r-=take;c+=take*b.costPerSellableKg;
+    await updateDoc(d.ref,take>=b.remainingKg?{remainingKg:0,status:"closed"}:{remainingKg:b.remainingKg-take});
   }
+  if(r>0)throw new Error("Insufficient "+type);
+  return +c.toFixed(2);
+}
 
-  /* 🔒 BUILD SALE OBJECT */
-  const sale = {
-    date: today,
-    createdAt: serverTimestamp(),
-    payment,
-    total: totalAmount,
+/* SALE */
+window.confirmSale=async()=>{
+  let items={};
 
-    // 🔥 SAVE TODAY'S PRICES
-    prices: {
-      broiler: +broilerPrice.value || 0,
-      country: +countryPrice.value || 0,
-      egg: +eggPrice.value || 0
-    },
+  if(active.broiler){items.broiler={qty:mode.broiler==="kg"?+broilerKg.value:(+broilerRs.value/+broilerPrice.value)};await consumeFIFO("broiler",items.broiler.qty)}
+  if(active.country){items.country={qty:mode.country==="kg"?+countryKg.value:(+countryRs.value/+countryPrice.value)};await consumeFIFO("country",items.country.qty)}
+  if(active.egg&&+eggQty.value>0)items.eggs={qty:+eggQty.value}
+  if(active.masala&&+masalaAmt.value>0)items.masala={amount:+masalaAmt.value}
 
-    // 🔥 SOLD ITEMS
-    items: {}
-  };
-
-  /* 🐔 BROILER */
-  if (active.broiler) {
-    const rate = +broilerPrice.value || 0;
-    const qty =
-      mode.broiler === "kg"
-        ? +broilerKg.value || 0
-        : rate > 0
-          ? (+broilerRs.value || 0) / rate
-          : 0;
-
-    const amount = qty * rate;
-
-    if (qty > 0) {
-      sale.items.broiler = {
-        qty: +qty.toFixed(3),
-        rate,
-        amount: +amount.toFixed(2)
-      };
-    }
-  }
-
-  /* 🐓 COUNTRY */
-  if (active.country) {
-    const rate = +countryPrice.value || 0;
-    const qty =
-      mode.country === "kg"
-        ? +countryKg.value || 0
-        : rate > 0
-          ? (+countryRs.value || 0) / rate
-          : 0;
-
-    const amount = qty * rate;
-
-    if (qty > 0) {
-      sale.items.country = {
-        qty: +qty.toFixed(3),
-        rate,
-        amount: +amount.toFixed(2)
-      };
-    }
-  }
-
-  /* 🥚 EGGS */
-  if (active.egg) {
-    const qty = +eggQty.value || 0;
-    const rate = +eggPrice.value || 0;
-
-    if (qty > 0) {
-      sale.items.eggs = {
-        qty,
-        rate,
-        amount: qty * rate
-      };
-    }
-  }
-
-  /* 🌶️ MASALA */
-  if (active.masala) {
-    const amount = +masalaAmt.value || 0;
-    if (amount > 0) {
-      sale.items.masala = {
-        amount
-      };
-    }
-  }
-
-  /* 💵 CASH EXTRA FIELDS */
-  if (payment === "cash") {
-    sale.received = +received.value || 0;
-    sale.return = sale.received - totalAmount;
-
-    if (sale.received < totalAmount) {
-      alert("Received amount is less than total");
-      return;
-    }
-  }
-
-  /* 🚀 SAVE TO FIREBASE */
-  try {
-    await addDoc(collection(db, "sales"), sale);
-    alert("Sale saved successfully");
-    location.reload();
-  } catch (err) {
-    console.error(err);
-    alert("Failed to save sale");
-  }
+  await addDoc(collection(db,"sales"),{date:today,items,total:+total.innerText,payment,createdAt:serverTimestamp()});
+  await deductLive(items);
+  alert("Sale saved");location.reload();
 };
 </script>
 
